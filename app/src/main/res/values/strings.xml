@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ThermoCall</string>
+    <string name="default_notification_channel_id">DEFAULT_NOTIFICATION_CHANNEL</string>
+</resources>
