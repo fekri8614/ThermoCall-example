@@ -9,6 +9,8 @@ const val BASE_URL = "https://thermocall-api.rubikamp.org/api/v1/"
 const val KEY_USER_EMAIL = "keyUserEmail"
 const val KEY_USER_PASSWORD = "keyUserPassword"
 
+const val VALUE_SUCCESS = "success"
+
 val FAKE_SENSOR_DATA = listOf<ThermoCall>(
     ThermoCall(id ="user_id_001", label ="Label 1", max= 0, min =0, sensorId ="sensor_001"),
     ThermoCall(id ="user_id_002", label ="Label 2", max= 0, min =0, sensorId ="sensor_002"),
