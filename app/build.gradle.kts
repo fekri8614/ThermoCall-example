@@ -52,20 +52,20 @@ android {
 
 dependencies {
 
-    val compose_ui_version = "1.4.0"
+    val composeUiVersion = "1.4.0"
 
     implementation("androidx.core:core-ktx:1.8.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.activity:activity-compose:1.7.1")
-    implementation("androidx.compose.ui:ui:$compose_ui_version")
-    implementation("androidx.compose.ui:ui-tooling-preview:$compose_ui_version")
+    implementation("androidx.compose.ui:ui:$composeUiVersion")
+    implementation("androidx.compose.ui:ui-tooling-preview:$composeUiVersion")
     implementation("androidx.compose.material:material:1.4.2")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_ui_version")
-    debugImplementation("androidx.compose.ui:ui-tooling:$compose_ui_version")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_ui_version")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeUiVersion")
+    debugImplementation("androidx.compose.ui:ui-tooling:$composeUiVersion")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:$composeUiVersion")
 
     // System Ui Controller
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.17.0")
@@ -74,7 +74,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.4.0-alpha01")
 
     // LiveData-State
-    implementation("androidx.compose.runtime:runtime-livedata:$compose_ui_version")
+    implementation("androidx.compose.runtime:runtime-livedata:$composeUiVersion")
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.3.0")
@@ -100,6 +100,11 @@ dependencies {
 
     // Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+
+    // Firebase Messaging
     implementation("com.google.firebase:firebase-messaging")
+
+    // Firebase Authentication
+    implementation("com.google.firebase:firebase-auth-ktx")
 
 }

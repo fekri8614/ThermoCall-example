@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -40,7 +39,8 @@ fun EntryScreen() {
     val viewModel = getNavViewModel<EntryViewModel>()
     val context = LocalContext.current
     val navigation = getNavController()
-    val userName = viewModel.fullName.observeAsState("")
+    val userEmail = viewModel.userEmail.observeAsState("")
+    val userPass = viewModel.userPassword.observeAsState(initial = "")
 
     Scaffold(
         topBar = {
@@ -50,9 +50,9 @@ fun EntryScreen() {
                 contentPadding = PaddingValues(start = 8.dp)
             ) {
                 Text(
-                    "ThermoCall",
+                    "Enter your Email and Password",
                     style = TextStyle(
-                        fontSize = 22.sp,
+                        fontSize = 20.sp,
                         fontWeight =
                         FontWeight.Bold
                     )
@@ -71,19 +71,22 @@ fun EntryScreen() {
             ) {
 
                 Spacer(Modifier.height(10.dp))
-                MyInput(viewModel)
 
+                MyInput(viewModel)
 
                 Button(
                     onClick = {
                         if (NetworkChecker(context).isInternetConnected) {
-                            if (userName.value.isNotEmpty() || userName.value.isNotBlank()) {
+                            if (userEmail.value.isNotEmpty() || userEmail.value.isNotBlank() && userPass.value.isNotEmpty() || userPass.value.isNotBlank()) {
                                 // save user entries
-                                viewModel.setData(userName.value)
+                                viewModel.setData(
+                                    email = userEmail.value,
+                                    password = userPass.value
+                                )
 
                                 if (viewModel.isUserDataSaved()) {
                                     navigation.navigate(MyScreens.DashboardScreen.route) {
-                                        popUpTo(MyScreens.SplashScreen.route)
+                                        popUpTo(MyScreens.SignInScreen.route)
                                     }
                                 } else {
                                     Toast.makeText(
@@ -115,18 +118,33 @@ fun EntryScreen() {
         }
     )
 
-
 }
 
 @Composable
 fun MyInput(viewModel: EntryViewModel) {
-    val userName = viewModel.fullName.observeAsState("")
+    val userEmail = viewModel.userEmail.observeAsState("")
+    val userPassword = viewModel.userPassword.observeAsState("")
 
-    MyEditText(edtValue = userName.value,
-        icon = Icons.Default.Person,
-        hint = "I'm ...",
-        imeAction = ImeAction.Done,
-        onValueChanges = { name ->
-            viewModel.fullName.value = name
-        })
+    Column(
+        verticalArrangement = Arrangement.SpaceAround,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        MyEditText(edtValue = userEmail.value,
+            icon = Icons.Default.Person,
+            hint = "Email",
+            imeAction = ImeAction.Done,
+            onValueChanges = { email ->
+                viewModel.userEmail.value = email
+            })
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        MyEditText(edtValue = userPassword.value,
+            icon = Icons.Default.Person,
+            hint = "Password",
+            imeAction = ImeAction.Done,
+            onValueChanges = { pass ->
+                viewModel.userPassword.value = pass
+            })
+    }
 }

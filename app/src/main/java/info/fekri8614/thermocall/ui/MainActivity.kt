@@ -2,12 +2,10 @@ package info.fekri8614.thermocall.ui
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -29,25 +26,22 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
-import dev.burnoo.cokoin.navigation.getNavController
 import info.fekri8614.thermocall.di.myModule
 import info.fekri8614.thermocall.ui.feature.aboutUs.AboutUsScreen
 import info.fekri8614.thermocall.ui.feature.dashboard.DashboardScreen
 import info.fekri8614.thermocall.ui.feature.entry.EntryScreen
 import info.fekri8614.thermocall.ui.feature.profile.ProfileScreen
 import info.fekri8614.thermocall.ui.feature.setup.SetupScreen
-import info.fekri8614.thermocall.ui.feature.splash.SplashScreen
+import info.fekri8614.thermocall.ui.feature.signIn.SignInScreen
+import info.fekri8614.thermocall.ui.feature.signUp.SignUpScreen
 import info.fekri8614.thermocall.ui.theme.BackgroundMain
 import info.fekri8614.thermocall.ui.theme.ThermoCallTheme
 import info.fekri8614.thermocall.util.IS_USER_FIRST_TIME
@@ -115,10 +109,14 @@ class MainActivity : ComponentActivity() {
 fun MainAppUi(isFirstTime: Boolean) {
     val controller = rememberNavController()
 
-    KoinNavHost(navController = controller, startDestination = MyScreens.SplashScreen.route) {
+    KoinNavHost(navController = controller, startDestination = MyScreens.SignInScreen.route) {
 
-        composable(route = MyScreens.SplashScreen.route) {
-            SplashScreen(isUserFirst = isFirstTime)
+        composable(route = MyScreens.SignInScreen.route) {
+            SignInScreen(isUserFirst = isFirstTime)
+        }
+
+        composable(route = MyScreens.SignUpScreen.route) {
+            SignUpScreen()
         }
 
         composable(route = MyScreens.DashboardScreen.route) {

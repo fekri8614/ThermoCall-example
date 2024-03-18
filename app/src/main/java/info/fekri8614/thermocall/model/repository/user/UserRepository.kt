@@ -1,6 +1,9 @@
 package info.fekri8614.thermocall.model.repository.user
 
 interface UserRepository {
-    fun getUserName(): String?
-    fun saveUserName(user: String)
+    fun getUserEmail(): String?
+    fun saveUserEmail(email: String)
+
+    fun getUserPassword(): String?
+    fun saveUserPassword(pass: String)
 }

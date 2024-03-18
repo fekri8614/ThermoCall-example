@@ -8,7 +8,7 @@ import info.fekri8614.thermocall.model.repository.user.UserRepository
 import info.fekri8614.thermocall.model.repository.user.UserRepositoryImpl
 import info.fekri8614.thermocall.ui.feature.dashboard.DashboardViewModel
 import info.fekri8614.thermocall.ui.feature.entry.EntryViewModel
-import info.fekri8614.thermocall.ui.feature.splash.SplashScreenViewModel
+import info.fekri8614.thermocall.ui.feature.signIn.SplashScreenViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
