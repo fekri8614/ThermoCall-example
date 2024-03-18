@@ -7,7 +7,7 @@ import info.fekri8614.thermocall.model.repository.thermocall.ThermoCallRepositor
 import info.fekri8614.thermocall.model.repository.user.UserRepository
 import info.fekri8614.thermocall.model.repository.user.UserRepositoryImpl
 import info.fekri8614.thermocall.ui.feature.dashboard.DashboardViewModel
-import info.fekri8614.thermocall.ui.feature.entry.EntryViewModel
+import info.fekri8614.thermocall.ui.feature.signUp.SignUpViewModel
 import info.fekri8614.thermocall.ui.feature.signIn.SignInViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -21,7 +21,7 @@ val myModule = module {
     single<ThermoCallRepository> { ThermoCallRepositoryImpl(get()) }
 
     viewModel { SignInViewModel(get()) }
-    viewModel { EntryViewModel(get()) }
+    viewModel { SignUpViewModel(get()) }
     viewModel { DashboardViewModel(get()) }
 
 }

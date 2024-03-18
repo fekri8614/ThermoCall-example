@@ -1,4 +1,4 @@
-package info.fekri8614.thermocall.ui.feature.signIn
+package info.fekri8614.thermocall.ui.feature.signUp
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,11 +9,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
-class SignInViewModel(private val userRepository: UserRepository) : ViewModel() {
+class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() {
+    val name = MutableLiveData("")
     val email = MutableLiveData("")
     val password = MutableLiveData("")
+    val confirmPassword = MutableLiveData("")
 
-    fun signInUser(loggingEvent: (String) -> Unit) {
+    fun signUpUser(loggingEvent: (String) -> Unit) {
 
         viewModelScope.launch(coroutineExceptionHandler) {
             // val result = userRepository.signIn(email.value!!, password.value!!)

@@ -37,11 +37,10 @@ import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri8614.thermocall.di.myModule
 import info.fekri8614.thermocall.ui.feature.aboutUs.AboutUsScreen
 import info.fekri8614.thermocall.ui.feature.dashboard.DashboardScreen
-import info.fekri8614.thermocall.ui.feature.entry.EntryScreen
+import info.fekri8614.thermocall.ui.feature.signUp.SignUpScreen
 import info.fekri8614.thermocall.ui.feature.profile.ProfileScreen
 import info.fekri8614.thermocall.ui.feature.setup.SetupScreen
 import info.fekri8614.thermocall.ui.feature.signIn.SignInScreen
-import info.fekri8614.thermocall.ui.feature.signUp.SignUpScreen
 import info.fekri8614.thermocall.ui.theme.BackgroundMain
 import info.fekri8614.thermocall.ui.theme.ThermoCallTheme
 import info.fekri8614.thermocall.util.IS_USER_FIRST_TIME
@@ -132,7 +131,7 @@ fun MainAppUi(isFirstTime: Boolean) {
         }
 
         composable(route = MyScreens.EntryScreen.route) {
-            EntryScreen()
+            SignUpScreen()
         }
 
         composable(route = MyScreens.NoInternetScreen.route) {
