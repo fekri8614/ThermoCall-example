@@ -1,5 +1,6 @@
 package info.fekri8614.thermocall.ui.feature.signIn
 
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -48,15 +49,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.firebase.auth.FirebaseAuth
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri8614.thermocall.R
+import info.fekri8614.thermocall.model.data.SignInUiState
 import info.fekri8614.thermocall.ui.theme.Shapes
 import info.fekri8614.thermocall.util.MyScreens
 import info.fekri8614.thermocall.util.NetworkChecker
 
 @Composable
-fun SignInScreen() {
+fun SignInScreen(auth: FirebaseAuth) {
     val uiController = rememberSystemUiController()
     SideEffect { uiController.setStatusBarColor(Blue) }
 
@@ -86,8 +89,29 @@ fun SignInScreen() {
 
             IconApp()
 
-            MainCardView(navigation, viewModel) { email, password ->
-                
+            MainCardView(navigation, viewModel) { data ->
+                viewModel.signInUser(
+                    auth = auth,
+                    data = data,
+                    onUserAdded = { authResult ->
+                        if(authResult.isSuccessful) {
+                            // user's signed in as well
+                            Log.i("SignInScreen", "User's logged in as well :-)")
+                            // save the data and navigate to DashboardScreen
+                            viewModel.saveUserData(data)
+                            // navigate to DashboardScreen
+                            navigation.navigate(MyScreens.DashboardScreen.route)
+                        } else {
+                            // user's not signed in and should be notified about it
+                            Log.e("SignInScreen", "User's not logged in :-/")
+                            // show the error message
+                            Toast.makeText(context, "Could not sign you in!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Please try again!", Toast.LENGTH_SHORT).show()
+                            // clear input to make user try again
+                            clearInput(viewModel)
+                        }
+                    }
+                )
             }
 
         }
@@ -112,7 +136,7 @@ fun IconApp() {
 }
 
 @Composable
-fun MainCardView(navigation: NavController, viewModel: SignInViewModel, signInEvent: (String, String) -> Unit) {
+fun MainCardView(navigation: NavController, viewModel: SignInViewModel, signInEvent: (SignInUiState) -> Unit) {
     val context = LocalContext.current
     val email = viewModel.email.observeAsState("")
     val password = viewModel.password.observeAsState("")
@@ -144,7 +168,7 @@ fun MainCardView(navigation: NavController, viewModel: SignInViewModel, signInEv
                     if (email.value.isNotEmpty() && password.value.isNotEmpty()) {
                         if (Patterns.EMAIL_ADDRESS.matcher(email.value).matches()) {
                             if (NetworkChecker(context).isInternetConnected) {
-                                signInEvent(viewModel.email.value!!, viewModel.password.value!!)
+                                signInEvent(SignInUiState(viewModel.email.value!!, viewModel.password.value!!))
                             } else {
                                 Toast.makeText(
                                     context,
