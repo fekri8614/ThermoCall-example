@@ -26,7 +26,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -55,10 +54,9 @@ import info.fekri8614.thermocall.R
 import info.fekri8614.thermocall.ui.theme.Shapes
 import info.fekri8614.thermocall.util.MyScreens
 import info.fekri8614.thermocall.util.NetworkChecker
-import info.fekri8614.thermocall.util.VALUE_SUCCESS
 
 @Composable
-fun SignInScreen(isUserFirst: Boolean) {
+fun SignInScreen() {
     val uiController = rememberSystemUiController()
     SideEffect { uiController.setStatusBarColor(Blue) }
 
@@ -88,22 +86,8 @@ fun SignInScreen(isUserFirst: Boolean) {
 
             IconApp()
 
-            MainCardView(navigation, viewModel) {
-
-                viewModel.signInUser {
-
-                    if (it == VALUE_SUCCESS) {
-                        navigation.navigate(MyScreens.DashboardScreen.route) {
-                            popUpTo(MyScreens.DashboardScreen.route) {
-                                inclusive = true
-                            }
-                        }
-                    } else {
-                        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-                    }
-
-                }
-
+            MainCardView(navigation, viewModel) { email, password ->
+                
             }
 
         }
@@ -114,25 +98,21 @@ fun SignInScreen(isUserFirst: Boolean) {
 
 @Composable
 fun IconApp() {
-
     Surface(
         modifier = Modifier
             .clip(CircleShape)
             .size(64.dp)
     ) {
-
         Image(
             imageVector = Icons.Default.AccountCircle,
             modifier = Modifier.padding(14.dp),
             contentDescription = null
         )
-
     }
-
 }
 
 @Composable
-fun MainCardView(navigation: NavController, viewModel: SignInViewModel, signInEvent: () -> Unit) {
+fun MainCardView(navigation: NavController, viewModel: SignInViewModel, signInEvent: (String, String) -> Unit) {
     val context = LocalContext.current
     val email = viewModel.email.observeAsState("")
     val password = viewModel.password.observeAsState("")
@@ -144,17 +124,14 @@ fun MainCardView(navigation: NavController, viewModel: SignInViewModel, signInEv
         elevation = 10.dp,
         shape = Shapes.medium
     ) {
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Text(
                 modifier = Modifier.padding(top = 18.dp, bottom = 18.dp),
                 text = "Sign In",
                 style = TextStyle(color = Blue, fontSize = 28.sp, fontWeight = FontWeight.Bold)
             )
-
             MainTextField(email.value, Icons.Default.Email, "Email") { viewModel.email.value = it }
             PasswordTextField(
                 password.value,
@@ -162,28 +139,34 @@ fun MainCardView(navigation: NavController, viewModel: SignInViewModel, signInEv
                 "Password"
             ) { viewModel.password.value = it }
 
-            Button(onClick = {
-
-                if (email.value.isNotEmpty() && password.value.isNotEmpty()) {
-                    if (Patterns.EMAIL_ADDRESS.matcher(email.value).matches()) {
-                        if (NetworkChecker(context).isInternetConnected) {
-                            signInEvent.invoke()
+            Button(
+                onClick = {
+                    if (email.value.isNotEmpty() && password.value.isNotEmpty()) {
+                        if (Patterns.EMAIL_ADDRESS.matcher(email.value).matches()) {
+                            if (NetworkChecker(context).isInternetConnected) {
+                                signInEvent(viewModel.email.value!!, viewModel.password.value!!)
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Please Connect to the Internet",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         } else {
                             Toast.makeText(
                                 context,
-                                "please connect to internet",
+                                "Email format is not Correct",
                                 Toast.LENGTH_SHORT
-                            ).show()
+                            )
+                                .show()
                         }
                     } else {
-                        Toast.makeText(context, "email format is not true", Toast.LENGTH_SHORT)
+                        Toast.makeText(context, "Please Write Data First...", Toast.LENGTH_SHORT)
                             .show()
                     }
-                } else {
-                    Toast.makeText(context, "please write data first...", Toast.LENGTH_SHORT).show()
-                }
-
-            }, modifier = Modifier.padding(top = 28.dp, bottom = 8.dp)) {
+                },
+                modifier = Modifier.padding(top = 28.dp, bottom = 8.dp)
+            ) {
                 Text(
                     modifier = Modifier.padding(8.dp),
                     text = "Log In"
@@ -209,15 +192,17 @@ fun MainCardView(navigation: NavController, viewModel: SignInViewModel, signInEv
                 }) { Text("Register Here", color = Blue) }
 
             }
-
         }
-
     }
-
 }
 
 @Composable
-fun MainTextField(edtValue: String, icon: ImageVector, hint: String, onValueChanges: (String) -> Unit) {
+fun MainTextField(
+    edtValue: String,
+    icon: ImageVector,
+    hint: String,
+    onValueChanges: (String) -> Unit
+) {
 
     OutlinedTextField(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -236,7 +221,12 @@ fun MainTextField(edtValue: String, icon: ImageVector, hint: String, onValueChan
 }
 
 @Composable
-fun PasswordTextField(edtValue: String, icon: ImageVector, hint: String, onValueChanges: (String) -> Unit) {
+fun PasswordTextField(
+    edtValue: String,
+    icon: ImageVector,
+    hint: String,
+    onValueChanges: (String) -> Unit
+) {
     val passwordVisible = remember { mutableStateOf(false) }
 
     OutlinedTextField(
@@ -272,3 +262,4 @@ private fun clearInput(viewModel: SignInViewModel) {
     viewModel.email.value = ""
     viewModel.password.value = ""
 }
+

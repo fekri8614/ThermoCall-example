@@ -32,6 +32,9 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri8614.thermocall.di.myModule
@@ -46,13 +49,15 @@ import info.fekri8614.thermocall.ui.theme.ThermoCallTheme
 import info.fekri8614.thermocall.util.IS_USER_FIRST_TIME
 import info.fekri8614.thermocall.util.MyScreens
 import org.koin.android.ext.koin.androidContext
+import kotlin.properties.Delegates
 
 class MainActivity : ComponentActivity() {
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Set directionality
         window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
-
         // Request permissions
         requestNotificationPermission()
 
@@ -77,9 +82,7 @@ class MainActivity : ComponentActivity() {
                     Surface(
                         modifier = Modifier.fillMaxSize(), color = BackgroundMain
                     ) {
-
                         MainAppUi(isFirstTime)
-
                     }
                 }
             }
@@ -105,13 +108,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainAppUi(isFirstTime: Boolean) {
+fun MainAppUi(isLoggedIn: Boolean) {
     val controller = rememberNavController()
 
     KoinNavHost(navController = controller, startDestination = MyScreens.SignInScreen.route) {
 
         composable(route = MyScreens.SignInScreen.route) {
-            SignInScreen(isUserFirst = isFirstTime)
+            SignInScreen()
         }
 
         composable(route = MyScreens.SignUpScreen.route) {
@@ -130,7 +133,7 @@ fun MainAppUi(isFirstTime: Boolean) {
             ProfileScreen()
         }
 
-        composable(route = MyScreens.EntryScreen.route) {
+        composable(route = MyScreens.SplashScreen.route) {
             SignUpScreen()
         }
 
