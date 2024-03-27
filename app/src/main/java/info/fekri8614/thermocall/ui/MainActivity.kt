@@ -44,6 +44,7 @@ import info.fekri8614.thermocall.ui.feature.signUp.SignUpScreen
 import info.fekri8614.thermocall.ui.feature.profile.ProfileScreen
 import info.fekri8614.thermocall.ui.feature.setup.SetupScreen
 import info.fekri8614.thermocall.ui.feature.signIn.SignInScreen
+import info.fekri8614.thermocall.ui.feature.splashScreen.SplashScreen
 import info.fekri8614.thermocall.ui.theme.BackgroundMain
 import info.fekri8614.thermocall.ui.theme.ThermoCallTheme
 import info.fekri8614.thermocall.util.IS_USER_FIRST_TIME
@@ -108,10 +109,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainAppUi(isLoggedIn: Boolean) {
+fun MainAppUi(isFirstTime: Boolean) {
     val controller = rememberNavController()
 
-    KoinNavHost(navController = controller, startDestination = MyScreens.SignInScreen.route) {
+    KoinNavHost(navController = controller, startDestination = MyScreens.SplashScreen.route) {
 
         composable(route = MyScreens.SignInScreen.route) {
             SignInScreen()
@@ -134,7 +135,7 @@ fun MainAppUi(isLoggedIn: Boolean) {
         }
 
         composable(route = MyScreens.SplashScreen.route) {
-            SignUpScreen()
+            SplashScreen(isFirstTime)
         }
 
         composable(route = MyScreens.NoInternetScreen.route) {

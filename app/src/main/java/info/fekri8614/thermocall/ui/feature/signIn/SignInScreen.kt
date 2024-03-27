@@ -59,7 +59,7 @@ import info.fekri8614.thermocall.util.MyScreens
 import info.fekri8614.thermocall.util.NetworkChecker
 
 @Composable
-fun SignInScreen(auth: FirebaseAuth) {
+fun SignInScreen() {
     val uiController = rememberSystemUiController()
     SideEffect { uiController.setStatusBarColor(Blue) }
 
@@ -91,7 +91,6 @@ fun SignInScreen(auth: FirebaseAuth) {
 
             MainCardView(navigation, viewModel) { data ->
                 viewModel.signInUser(
-                    auth = auth,
                     data = data,
                     onUserAdded = { authResult ->
                         if(authResult.isSuccessful) {

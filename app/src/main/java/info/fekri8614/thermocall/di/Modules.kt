@@ -1,6 +1,7 @@
 package info.fekri8614.thermocall.di
 
 import android.content.Context
+import com.google.firebase.auth.FirebaseAuth
 import info.fekri8614.thermocall.model.net.createApiService
 import info.fekri8614.thermocall.model.repository.thermocall.ThermoCallRepository
 import info.fekri8614.thermocall.model.repository.thermocall.ThermoCallRepositoryImpl
@@ -20,10 +21,11 @@ val myModule = module {
 
     single<UserRepository> { UserRepositoryImpl(get()) }
     single<ThermoCallRepository> { ThermoCallRepositoryImpl(get()) }
+    single<FirebaseAuth> { FirebaseAuth.getInstance() }
 
-    viewModel { SignInViewModel(get()) }
+    viewModel { SignInViewModel(get(), get()) }
     viewModel { SignUpViewModel(get()) }
     viewModel { DashboardViewModel(get()) }
-    viewModel { SplashViewModel() }
+    viewModel { SplashViewModel(get()) }
 
 }
