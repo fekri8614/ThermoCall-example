@@ -24,7 +24,7 @@ val myModule = module {
     single<FirebaseAuth> { FirebaseAuth.getInstance() }
 
     viewModel { SignInViewModel(get(), get()) }
-    viewModel { SignUpViewModel(get()) }
+    viewModel { SignUpViewModel(get(), get()) }
     viewModel { DashboardViewModel(get()) }
     viewModel { SplashViewModel(get()) }
 

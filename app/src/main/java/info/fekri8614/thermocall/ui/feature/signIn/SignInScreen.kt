@@ -105,7 +105,6 @@ fun SignInScreen() {
                             Log.e("SignInScreen", "User's not logged in :-/")
                             // show the error message
                             Toast.makeText(context, "Could not sign you in!", Toast.LENGTH_SHORT).show()
-                            Toast.makeText(context, "Please try again!", Toast.LENGTH_SHORT).show()
                             // clear input to make user try again
                             clearInput(viewModel)
                         }

@@ -1,5 +1,6 @@
 package info.fekri8614.thermocall.ui.feature.signUp
 
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -60,6 +61,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri8614.thermocall.R
+import info.fekri8614.thermocall.model.data.SignInUiState
 import info.fekri8614.thermocall.ui.feature.signIn.MainTextField
 import info.fekri8614.thermocall.ui.theme.BackgroundMain
 import info.fekri8614.thermocall.ui.theme.Shapes
@@ -99,23 +101,28 @@ fun SignUpScreen() {
 
             IconApp()
 
-            MainCardView(navigation, viewModel) {
+            MainCardView(navigation, viewModel) { data ->
 
-                viewModel.signUpUser {
-
-                    if (it == VALUE_SUCCESS) {
-
-                        navigation.navigate(MyScreens.DashboardScreen.route) {
-                            popUpTo(MyScreens.DashboardScreen.route) {
-                                inclusive = true
-                            }
+                viewModel.signUpUser(
+                    data = data,
+                    onUserAdded = { authResult ->
+                        if(authResult.isSuccessful) {
+                            // user's signed in as well
+                            Log.i("SignInScreen", "User's logged in as well :-)")
+                            // save the data and navigate to DashboardScreen
+                            viewModel.saveUserData(data)
+                            // navigate to DashboardScreen
+                            navigation.navigate(MyScreens.DashboardScreen.route)
+                        } else {
+                            // user's not signed in and should be notified about it
+                            Log.e("SignInScreen", "User's not logged in :-/")
+                            // show the error message
+                            Toast.makeText(context, "Could not sign you in!", Toast.LENGTH_SHORT).show()
+                            // clear input to make user try again
+                            clearInputs(viewModel)
                         }
-
-                    } else {
-                        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                     }
-
-                }
+                )
 
             }
 
@@ -143,7 +150,7 @@ fun IconApp() {
 }
 
 @Composable
-fun MainCardView(navigation: NavController, viewModel: SignUpViewModel, SignUpEvent: () -> Unit) {
+fun MainCardView(navigation: NavController, viewModel: SignUpViewModel, signUpEvent: (SignInUiState) -> Unit) {
     val name = viewModel.name.observeAsState("")
     val email = viewModel.email.observeAsState("")
     val password = viewModel.password.observeAsState("")
@@ -190,7 +197,7 @@ fun MainCardView(navigation: NavController, viewModel: SignUpViewModel, SignUpEv
                         if (password.value.length >= 8) {
                             if (Patterns.EMAIL_ADDRESS.matcher(email.value).matches()) {
                                 if (NetworkChecker(context).isInternetConnected) {
-                                    SignUpEvent.invoke()
+                                    signUpEvent.invoke(SignInUiState(email.value, password.value))
                                 } else {
                                     Toast.makeText(
                                         context,
@@ -290,4 +297,5 @@ fun PasswordTextField(edtValue: String, icon: ImageVector, hint: String, onValue
 fun clearInputs(viewModel: SignUpViewModel) {
     viewModel.email.value = ""
     viewModel.password.value = ""
+    viewModel.confirmPassword.value = ""
 }
