@@ -11,6 +11,7 @@ import info.fekri8614.thermocall.model.data.firebase.NotificationBody
 import info.fekri8614.thermocall.model.data.firebase.SendMessageDto
 import info.fekri8614.thermocall.model.repository.thermocall.ThermoCallRepository
 import info.fekri8614.thermocall.util.coroutineExceptionHandler
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -38,6 +39,8 @@ class DashboardViewModel(
             dataSensors.value = sensorData
 
             showProgress.value = false
+
+            delay(5000) // repeat every 5 secs.
         }
     }
 
