@@ -1,5 +1,6 @@
 package info.fekri8614.thermocall.ui.feature.dashboard
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -24,6 +25,9 @@ class DashboardViewModel(
     val dataSensors = mutableStateOf<List<ThermoCall>>(listOf())
     val showNetDialog = mutableStateOf(false)
 
+    val showErrorMessage = mutableStateOf(false)
+    val errorMessage = mutableStateOf("")
+
     var state by mutableStateOf(ChatState())
         private set
 
@@ -35,17 +39,22 @@ class DashboardViewModel(
     fun getDataFromNet() {
         viewModelScope.launch(coroutineExceptionHandler) {
             while (isActive) {
-                showProgress.value = true
+                try {
+                    showProgress.value = true
 
-                val sensorData = thermoCallRepository.getAllThermoCalls()
-                dataSensors.value = sensorData
+                    val sensorData = thermoCallRepository.getAllThermoCalls()
+                    dataSensors.value = sensorData
 
-                showProgress.value = false
-
-                delay(5000) // repeat every 5 secs.
+                    showProgress.value = false
+                } catch (e: Exception) {
+                    Log.e("ViewModel", "Error fetching data: ", e)
+                    errorMessage.value = "Failed to fetch data: ${e.localizedMessage}"
+                }
+                delay(5000) // Wait for 5 seconds before trying again
             }
         }
     }
+
 
     fun onRemoteTokenChanged(newToken: String) {
         state = state.copy(

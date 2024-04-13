@@ -1,7 +1,6 @@
 package info.fekri8614.thermocall.ui.feature.dashboard
 
 import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -84,22 +83,36 @@ fun DashboardScreen() {
                     icon = { Icon(Icons.Default.Menu, contentDescription = "Menu") },
                     onClick = { scope.launch { scaffoldState.drawerState.open() } }
                 )
-
-                ExtendedFloatingActionButton(
-                    text = { Text(text = "Push Notification") },
-                    onClick = { /*TODO*/ }
-                )
             }
-
         },
         content = {
-            MainScreenBody(
-                modifier = Modifier.padding(it),
-                viewModel = viewModel,
-                context = context,
-                dataSensor = dataSensors,
-                onSensorClicked = { id -> println("THE_ID ==> $id") }
-            )
+            if (viewModel.showErrorMessage.value && viewModel.errorMessage.value.isNotEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Red)
+                        .padding(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Text(
+                        text = viewModel.errorMessage.value,
+                        style = TextStyle(
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colors.error,
+                            fontSize = 20.sp
+                        )
+                    )
+                }
+            } else {
+                MainScreenBody(
+                    modifier = Modifier.padding(it),
+                    viewModel = viewModel,
+                    context = context,
+                    dataSensor = dataSensors,
+                    onSensorClicked = { id -> println("THE_ID ==> $id") }
+                )
+            }
 
             if (viewModel.showNetDialog.value) {
                 ShowAlertDialog(title = "Check your Connection!",
@@ -169,7 +182,11 @@ private fun SensorItemList(
             .fillMaxWidth(1f),
         color = BackgroundMain
     ) {
-        LazyColumn(modifier = modifier.padding(top = 16.dp), contentPadding = PaddingValues(bottom = 16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        LazyColumn(
+            modifier = modifier.padding(top = 16.dp),
+            contentPadding = PaddingValues(bottom = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             items(data.size) { index ->
                 SensorItem(onSensorClicked = onSensorClicked, data = data[index])
             }
