@@ -53,6 +53,7 @@ android {
 dependencies {
 
     val composeUiVersion = "1.4.0"
+    val work_version = "2.9.0"
 
     implementation("androidx.core:core-ktx:1.8.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
@@ -106,5 +107,8 @@ dependencies {
 
     // Firebase Authentication
     implementation("com.google.firebase:firebase-auth-ktx")
+    
+    // WorkManager
+    implementation("androidx.work:work-runtime-ktx:$work_version")
 
 }
