@@ -10,7 +10,7 @@ import info.fekri8614.thermocall.model.data.ThermoCall
 import info.fekri8614.thermocall.model.data.firebase.ChatState
 import info.fekri8614.thermocall.model.data.firebase.NotificationBody
 import info.fekri8614.thermocall.model.data.firebase.SendMessageDto
-import info.fekri8614.thermocall.model.repository.thermocall.ThermoCallRepository
+import info.fekri8614.thermocall.model.repository.thermocall.SensorRepository
 import info.fekri8614.thermocall.util.coroutineExceptionHandler
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -19,13 +19,15 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class DashboardViewModel(
-    private val thermoCallRepository: ThermoCallRepository,
+    private val sensorRepository: SensorRepository,
 ) : ViewModel() {
     val showProgress = mutableStateOf(false)
     val dataSensors = mutableStateOf<List<ThermoCall>>(listOf())
-    val showNetDialog = mutableStateOf(false)
 
+    val showNetDialog = mutableStateOf(false)
+    val showAddSensorDialog = mutableStateOf(false)
     val showErrorMessage = mutableStateOf(false)
+
     val errorMessage = mutableStateOf("")
 
     var state by mutableStateOf(ChatState())
@@ -42,12 +44,12 @@ class DashboardViewModel(
                 try {
                     showProgress.value = true
 
-                    val sensorData = thermoCallRepository.getAllThermoCalls()
+                    val sensorData = sensorRepository.getAllThermoCalls()
                     dataSensors.value = sensorData
 
                     showProgress.value = false
                 } catch (e: Exception) {
-                    Log.e("ViewModel", "Error fetching data: ", e)
+                    Log.e("DashboardViewModel", "Error fetching data: ", e)
                     errorMessage.value = "Failed to fetch data: ${e.localizedMessage}"
                 }
                 delay(5000) // Wait for 5 seconds before trying again
@@ -87,9 +89,9 @@ class DashboardViewModel(
 
             try {
                 if(isBroadcast) {
-                    thermoCallRepository.broadcast(messageDto)
+                    sensorRepository.broadcast(messageDto)
                 } else {
-                    thermoCallRepository.sendMessage(messageDto)
+                    sensorRepository.sendMessage(messageDto)
                 }
 
                 state = state.copy(

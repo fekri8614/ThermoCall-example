@@ -10,4 +10,9 @@ class SplashViewModel(
     fun isUserDataSaved(): Boolean {
         return (!userRepository.getUserEmail().isNullOrEmpty() && !userRepository.getUserPassword().isNullOrEmpty())
     }
+
+    fun setUserData() {
+        userRepository.saveUserEmail("fekri86@gmail.com")
+        userRepository.saveUserPassword("12345678")
+    }
 }

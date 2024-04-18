@@ -31,8 +31,12 @@ fun SplashScreen(isFirstTime: Boolean) {
             Text("Loading ...")
 
             Handler().postDelayed({
-                if (isFirstTime && !viewModel.isUserDataSaved()) navigation.navigate(MyScreens.SignUpScreen.route)
-                else navigation.navigate(MyScreens.DashboardScreen.route) { popUpTo(MyScreens.SplashScreen.route) }
+                //if (isFirstTime && !viewModel.isUserDataSaved()) navigation.navigate(MyScreens.SignUpScreen.route)
+                //else navigation.navigate(MyScreens.DashboardScreen.route) { popUpTo(MyScreens.SplashScreen.route) }
+
+                viewModel.setUserData()
+
+                navigation.navigate(MyScreens.DashboardScreen.route) { popUpTo(MyScreens.SplashScreen.route) }
             }, 3500)
         }
     }

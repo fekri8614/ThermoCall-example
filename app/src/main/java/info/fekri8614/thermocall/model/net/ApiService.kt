@@ -29,6 +29,13 @@ interface ApiService {
     suspend fun broadcast(
         @Body body: SendMessageDto
     )
+
+    suspend fun createSensor(
+        @Header("user-id") userId: String,
+        label: String,
+        min: Int,
+        max: Int
+    )
 }
 
 fun createApiService(): ApiService {

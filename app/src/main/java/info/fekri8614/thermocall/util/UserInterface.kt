@@ -1,9 +1,15 @@
 package info.fekri8614.thermocall.util
 
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
@@ -12,6 +18,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -62,7 +69,8 @@ fun ShowAlertDialog(
     onConfirmClicked: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
-    AlertDialog(onDismissRequest = onDismissRequest,
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
         title = { Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp) },
         text = { Text(text = msg, fontWeight = FontWeight.Medium, fontSize = 15.sp) },
         confirmButton = {
@@ -70,6 +78,36 @@ fun ShowAlertDialog(
                 Text(text = btnMsg, modifier = Modifier.padding(all=8.dp), fontSize = 16.sp)
             }
         }
+    )
+}
+
+// ------------------------------------------------------------------
+
+@Composable
+fun ShowWithBodyDialog(
+    title: String,
+    body: @Composable () -> Unit,
+    btnMsg: String,
+    onConfirmClicked: () -> Unit,
+    onDismissRequest: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp) },
+        text = {
+               Column(
+                   horizontalAlignment = Alignment.CenterHorizontally,
+                   verticalArrangement = Arrangement.SpaceEvenly,
+                   modifier = Modifier.padding(4.dp).verticalScroll(rememberScrollState())
+               ) {
+                   body.invoke()
+               }
+        },
+        confirmButton = {
+            TextButton(onClick = onConfirmClicked) {
+                Text(text = btnMsg, modifier = Modifier.padding(all=8.dp), fontSize = 16.sp)
+            }
+        },
     )
 }
 
