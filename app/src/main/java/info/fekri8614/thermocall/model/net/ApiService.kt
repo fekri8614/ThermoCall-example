@@ -32,6 +32,7 @@ interface ApiService {
 
     suspend fun createSensor(
         @Header("user-id") userId: String,
+        sensorId: String,
         label: String,
         min: Int,
         max: Int

@@ -1,5 +1,6 @@
 package info.fekri8614.thermocall.ui.feature.dashboard
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
+import info.fekri8614.thermocall.model.data.sensor.Sensor
 import info.fekri8614.thermocall.ui.theme.BackgroundMain
 import info.fekri8614.thermocall.ui.theme.PrimaryDarkColor
 import info.fekri8614.thermocall.util.ShowAlertDialog
@@ -146,23 +149,62 @@ fun DashboardScreen() {
                     )
                 }
                 if (viewModel.showAddSensorDialog.value) {
+                    val nSensorId = viewModel.sensorId.observeAsState("")
+                    val nSensorLabel = viewModel.sensorId.observeAsState("")
+                    val nSensorMin = viewModel.sensorId.observeAsState("0")
+                    val nSensorMax = viewModel.sensorId.observeAsState("0")
                     ShowWithBodyDialog(
                         title = "Add New Sensor",
                         body = {
                             CreateNewSensor(
-                                sensorId = "",
-                                label = "",
-                                min = 0,
-                                max = 0,
-                                onSensorIdChanged = {},
-                                onLabelChanged = {},
-                                onMinChanged = {},
-                                onMaxChanged = {}
+                                sensorId = nSensorId.value,
+                                label = nSensorLabel.value,
+                                min = nSensorMin.value.toInt(),
+                                max = nSensorMax.value.toInt(),
+                                onSensorIdChanged = { nId -> viewModel.sensorId.value = nId },
+                                onLabelChanged = { nLabel -> viewModel.sensorLabel.value = nLabel },
+                                onMinChanged = { nMin -> viewModel.sensorMin.value = nMin },
+                                onMaxChanged = { nMax -> viewModel.sensorMax.value = nMax }
                             )
                         },
                         btnMsg = "Confirm",
                         onConfirmClicked = {
-                            viewModel.showAddSensorDialog.value = false
+                            if (
+                                viewModel.sensorId.value!!.isNotEmpty() && viewModel.sensorId.value!!.isNotBlank() && !viewModel.sensorId.value!!.contains(
+                                    " "
+                                ) &&
+                                viewModel.sensorLabel.value!!.isNotEmpty() && viewModel.sensorLabel.value!!.isNotBlank() && !viewModel.sensorLabel.value!!.contains(
+                                    " "
+                                ) &&
+                                viewModel.sensorMin.value != 0 && viewModel.sensorMin.value.toString()
+                                    .isNotBlank() &&
+                                viewModel.sensorMax.value != 0 && viewModel.sensorMax.value.toString()
+                                    .isNotBlank()
+                            ) {
+                                val newSensor = Sensor(
+                                    userId = "0SGvUxSRWbXx17hLj9iWAIznLYp2",
+                                    sensorId = viewModel.sensorId.value!!,
+                                    label = viewModel.sensorLabel.value!!,
+                                    min = viewModel.sensorMin.value!!,
+                                    max = viewModel.sensorMax.value!!
+                                )
+                                viewModel.createSensor(newSensor)
+                                viewModel.clearNewSensorData()
+                                viewModel.showAddSensorDialog.value = false
+                                Toast.makeText(
+                                    context,
+                                    "Your sensor is created successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                viewModel.clearNewSensorData()
+                                viewModel.showAddSensorDialog.value = false
+                                Toast.makeText(
+                                    context,
+                                    "Couldn't create sensor",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         },
                         onDismissRequest = {
                             viewModel.showAddSensorDialog.value = false

@@ -23,6 +23,7 @@ class SensorRepositoryImpl(
     override suspend fun createSensor(body: Sensor) {
         apiService.createSensor(
             userId = body.userId,
+            sensorId = body.sensorId,
             label = body.label,
             min = body.min,
             max = body.max
