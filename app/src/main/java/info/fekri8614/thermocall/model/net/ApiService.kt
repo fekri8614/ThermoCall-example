@@ -2,6 +2,7 @@ package info.fekri8614.thermocall.model.net
 
 import info.fekri8614.thermocall.model.data.SensorsResponse
 import info.fekri8614.thermocall.model.data.firebase.SendMessageDto
+import info.fekri8614.thermocall.model.data.sensor.Sensor
 import info.fekri8614.thermocall.util.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -30,12 +31,10 @@ interface ApiService {
         @Body body: SendMessageDto
     )
 
+    @POST("my-sensors/")
     suspend fun createSensor(
-        @Header("user-id") userId: String,
-        sensorId: String,
-        label: String,
-        min: Int,
-        max: Int
+        @Header("user-id") userId: String = "0SGvUxSRWbXx17hLj9iWAIznLYp2",
+        @Body sensorData: Sensor
     )
 }
 

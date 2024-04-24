@@ -41,6 +41,7 @@ import info.fekri8614.thermocall.ui.theme.BackgroundMain
 import info.fekri8614.thermocall.ui.theme.PrimaryDarkColor
 import info.fekri8614.thermocall.util.ShowAlertDialog
 import info.fekri8614.thermocall.util.ShowWithBodyDialog
+import info.fekri8614.thermocall.util.USER_ID
 import kotlinx.coroutines.launch
 
 @Composable
@@ -150,17 +151,17 @@ fun DashboardScreen() {
                 }
                 if (viewModel.showAddSensorDialog.value) {
                     val nSensorId = viewModel.sensorId.observeAsState("")
-                    val nSensorLabel = viewModel.sensorId.observeAsState("")
-                    val nSensorMin = viewModel.sensorId.observeAsState("0")
-                    val nSensorMax = viewModel.sensorId.observeAsState("0")
+                    val nSensorLabel = viewModel.sensorLabel.observeAsState("")
+                    val nSensorMin = viewModel.sensorMin.observeAsState("")
+                    val nSensorMax = viewModel.sensorMax.observeAsState("")
                     ShowWithBodyDialog(
                         title = "Add New Sensor",
                         body = {
                             CreateNewSensor(
                                 sensorId = nSensorId.value,
                                 label = nSensorLabel.value,
-                                min = nSensorMin.value.toInt(),
-                                max = nSensorMax.value.toInt(),
+                                min = nSensorMin.value,
+                                max = nSensorMax.value,
                                 onSensorIdChanged = { nId -> viewModel.sensorId.value = nId },
                                 onLabelChanged = { nLabel -> viewModel.sensorLabel.value = nLabel },
                                 onMinChanged = { nMin -> viewModel.sensorMin.value = nMin },
@@ -173,16 +174,13 @@ fun DashboardScreen() {
                                 viewModel.sensorId.value!!.isNotEmpty() && viewModel.sensorId.value!!.isNotBlank() && !viewModel.sensorId.value!!.contains(
                                     " "
                                 ) &&
-                                viewModel.sensorLabel.value!!.isNotEmpty() && viewModel.sensorLabel.value!!.isNotBlank() && !viewModel.sensorLabel.value!!.contains(
-                                    " "
-                                ) &&
-                                viewModel.sensorMin.value != 0 && viewModel.sensorMin.value.toString()
+                                viewModel.sensorLabel.value!!.isNotEmpty() && viewModel.sensorLabel.value!!.isNotBlank() &&
+                                viewModel.sensorMin.value!!.isNotEmpty() && viewModel.sensorMin.value.toString()
                                     .isNotBlank() &&
-                                viewModel.sensorMax.value != 0 && viewModel.sensorMax.value.toString()
+                                viewModel.sensorMax.value!!.isNotEmpty() && viewModel.sensorMax.value.toString()
                                     .isNotBlank()
                             ) {
                                 val newSensor = Sensor(
-                                    userId = "0SGvUxSRWbXx17hLj9iWAIznLYp2",
                                     sensorId = viewModel.sensorId.value!!,
                                     label = viewModel.sensorLabel.value!!,
                                     min = viewModel.sensorMin.value!!,
@@ -191,11 +189,6 @@ fun DashboardScreen() {
                                 viewModel.createSensor(newSensor)
                                 viewModel.clearNewSensorData()
                                 viewModel.showAddSensorDialog.value = false
-                                Toast.makeText(
-                                    context,
-                                    "Your sensor is created successfully",
-                                    Toast.LENGTH_SHORT
-                                ).show()
                             } else {
                                 viewModel.clearNewSensorData()
                                 viewModel.showAddSensorDialog.value = false

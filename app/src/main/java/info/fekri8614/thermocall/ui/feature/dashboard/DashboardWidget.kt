@@ -227,9 +227,7 @@ class DashboardWidget {
         hint: String,
         onValueChanges: (String) -> Unit
     ) {
-
         OutlinedTextField(
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             label = { Text(hint) },
             value = edtValue,
             singleLine = true,
@@ -241,19 +239,18 @@ class DashboardWidget {
             shape = Shapes.medium,
             leadingIcon = { Icon(icon, null) }
         )
-
     }
 
     @Composable
     fun CreateNewSensor(
         sensorId: String,
         label: String,
-        min: Int,
-        max: Int,
+        min: String,
+        max: String,
         onSensorIdChanged: (String) -> Unit,
         onLabelChanged: (String) -> Unit,
-        onMinChanged: (Int) -> Unit,
-        onMaxChanged: (Int) -> Unit
+        onMinChanged: (String) -> Unit,
+        onMaxChanged: (String) -> Unit
     ) {
         MainTextField(edtValue = sensorId, icon = Icons.Default.Create, hint = "Sensor Id") { id ->
             onSensorIdChanged.invoke(id)
@@ -261,11 +258,11 @@ class DashboardWidget {
         MainTextField(edtValue = label, icon = Icons.Default.Create, hint = "Label") { nLabel ->
             onLabelChanged.invoke(nLabel)
         }
-        MainTextField(edtValue = min.toString(), icon = Icons.Default.Create, hint = "Min") { id ->
-            onMinChanged.invoke(id.toInt())
+        MainTextField(edtValue = min, icon = Icons.Default.Create, hint = "Min") { nMin ->
+            onMinChanged.invoke(nMin)
         }
-        MainTextField(edtValue = max.toString(), icon = Icons.Default.Create, hint = "Max") { id ->
-            onMaxChanged.invoke(id.toInt())
+        MainTextField(edtValue = max, icon = Icons.Default.Create, hint = "Max") { nMax ->
+            onMaxChanged.invoke(nMax)
         }
     }
 }

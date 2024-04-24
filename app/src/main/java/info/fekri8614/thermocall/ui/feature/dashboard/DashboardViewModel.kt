@@ -28,8 +28,8 @@ class DashboardViewModel(
 
     val sensorId = MutableLiveData("")
     val sensorLabel = MutableLiveData("")
-    val sensorMin = MutableLiveData(0)
-    val sensorMax = MutableLiveData(0)
+    val sensorMin = MutableLiveData("")
+    val sensorMax = MutableLiveData("")
 
     val showNetDialog = mutableStateOf(false)
     val showAddSensorDialog = mutableStateOf(false)
@@ -76,8 +76,8 @@ class DashboardViewModel(
     fun clearNewSensorData() {
         sensorId.value = ""
         sensorLabel.value = ""
-        sensorMin.value = 0
-        sensorMax.value = 0
+        sensorMin.value = ""
+        sensorMax.value = ""
     }
 
 
