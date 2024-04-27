@@ -68,7 +68,6 @@ import info.fekri8614.thermocall.ui.theme.Shapes
 import info.fekri8614.thermocall.util.MyEditText
 import info.fekri8614.thermocall.util.MyScreens
 import info.fekri8614.thermocall.util.NetworkChecker
-import info.fekri8614.thermocall.util.VALUE_SUCCESS
 
 @Composable
 fun SignUpScreen() {

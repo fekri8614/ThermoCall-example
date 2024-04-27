@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
@@ -32,7 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import info.fekri8614.thermocall.R
@@ -117,7 +115,7 @@ class DashboardWidget {
                 .height(100.dp)
                 .padding(top = 16.dp)
                 .clickable {
-                    onSensorClicked.invoke(data.sensorId)
+                    onSensorClicked.invoke(data.id)
                 },
             border = BorderStroke(2.dp, Color.Black),
             elevation = 3.dp,

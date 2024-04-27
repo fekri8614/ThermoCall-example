@@ -13,4 +13,8 @@ interface SensorRepository {
 
     suspend fun createSensor(body: Sensor)
 
+    suspend fun getSensorById(sensorId: String): Sensor
+
+    suspend fun deleteSensorById(sensorId: String)
+
 }

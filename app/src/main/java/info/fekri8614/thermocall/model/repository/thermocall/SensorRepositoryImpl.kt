@@ -30,4 +30,12 @@ class SensorRepositoryImpl(
             )
         )
     }
+
+    override suspend fun getSensorById(sensorId: String): Sensor {
+        return apiService.getSensorById(sensorId = sensorId)
+    }
+
+    override suspend fun deleteSensorById(sensorId: String) {
+        apiService.deleteSensorById(sensorId = sensorId)
+    }
 }

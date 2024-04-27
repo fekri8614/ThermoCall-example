@@ -10,7 +10,7 @@ const val USER_ID = "0SGvUxSRWbXx17hLj9iWAIznLYp2";
 const val KEY_USER_EMAIL = "keyUserEmail"
 const val KEY_USER_PASSWORD = "keyUserPassword"
 
-const val VALUE_SUCCESS = "success"
+const val KEY_SHOW_SENSOR = "keyShowSensorItem"
 
 val FAKE_SENSOR_DATA = listOf<ThermoCall>(
     ThermoCall(id ="user_id_001", label ="Label 1", max= 0, min =0, sensorId ="sensor_001"),

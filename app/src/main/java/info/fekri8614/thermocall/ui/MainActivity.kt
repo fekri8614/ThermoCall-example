@@ -29,8 +29,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -38,6 +40,7 @@ import com.google.firebase.ktx.Firebase
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri8614.thermocall.di.myModule
+import info.fekri8614.thermocall.ui.feature.ShowSensorScreen
 import info.fekri8614.thermocall.ui.feature.aboutUs.AboutUsScreen
 import info.fekri8614.thermocall.ui.feature.dashboard.DashboardScreen
 import info.fekri8614.thermocall.ui.feature.signUp.SignUpScreen
@@ -48,6 +51,7 @@ import info.fekri8614.thermocall.ui.feature.splashScreen.SplashScreen
 import info.fekri8614.thermocall.ui.theme.BackgroundMain
 import info.fekri8614.thermocall.ui.theme.ThermoCallTheme
 import info.fekri8614.thermocall.util.IS_USER_FIRST_TIME
+import info.fekri8614.thermocall.util.KEY_SHOW_SENSOR
 import info.fekri8614.thermocall.util.MyScreens
 import org.koin.android.ext.koin.androidContext
 import kotlin.properties.Delegates
@@ -144,6 +148,14 @@ fun MainAppUi(isFirstTime: Boolean) {
 
         composable(route = MyScreens.SetupScreen.route) {
             SetupScreen()
+        }
+        composable(
+            route = MyScreens.ShowSensorScreen.route + "/${KEY_SHOW_SENSOR}",
+            arguments = listOf(navArgument(KEY_SHOW_SENSOR) {
+                type = NavType.StringType
+            })
+            ) {
+            ShowSensorScreen(it.arguments!!.getString(KEY_SHOW_SENSOR, "null"))
         }
     }
 }

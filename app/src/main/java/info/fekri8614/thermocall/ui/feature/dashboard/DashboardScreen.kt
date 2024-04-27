@@ -1,5 +1,6 @@
 package info.fekri8614.thermocall.ui.feature.dashboard
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,9 +40,9 @@ import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri8614.thermocall.model.data.sensor.Sensor
 import info.fekri8614.thermocall.ui.theme.BackgroundMain
 import info.fekri8614.thermocall.ui.theme.PrimaryDarkColor
+import info.fekri8614.thermocall.util.MyScreens
 import info.fekri8614.thermocall.util.ShowAlertDialog
 import info.fekri8614.thermocall.util.ShowWithBodyDialog
-import info.fekri8614.thermocall.util.USER_ID
 import kotlinx.coroutines.launch
 
 @Composable
@@ -131,7 +132,9 @@ fun DashboardScreen() {
                         viewModel = viewModel,
                         context = context,
                         dataSensor = dataSensors,
-                        onSensorClicked = { id -> println("THE_ID ==> $id") }
+                        onSensorClicked = { id ->
+                            navController.navigate(MyScreens.ShowSensorScreen.route + "/$id")
+                        }
                     )
                 }
 

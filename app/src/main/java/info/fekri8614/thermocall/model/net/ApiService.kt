@@ -1,40 +1,48 @@
 package info.fekri8614.thermocall.model.net
 
-import info.fekri8614.thermocall.model.data.SensorsResponse
+import info.fekri8614.thermocall.model.data.*
 import info.fekri8614.thermocall.model.data.firebase.SendMessageDto
 import info.fekri8614.thermocall.model.data.sensor.Sensor
-import info.fekri8614.thermocall.util.BASE_URL
+import info.fekri8614.thermocall.util.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 
 // Write http(s) requests here
 interface ApiService {
-    // https://thermocall-api.rubikamp.org/apiuiop/v1/
+    // https://thermocall-api.rubikamp.org/api/v1/
 
     @GET("my-sensors/")
     suspend fun getAllSensors(
-        @Header("user-id") userId: String = "0SGvUxSRWbXx17hLj9iWAIznLYp2"
+        @Header("user-id") userId: String = USER_ID
     ): SensorsResponse
 
-    @POST("/send")
+    @POST("send/")
     suspend fun sendMessage(
         @Body body: SendMessageDto
     )
 
-    @POST("/broadcast")
+    @POST("broadcast/")
     suspend fun broadcast(
         @Body body: SendMessageDto
     )
 
     @POST("my-sensors/")
     suspend fun createSensor(
-        @Header("user-id") userId: String = "0SGvUxSRWbXx17hLj9iWAIznLYp2",
+        @Header("user-id") userId: String = USER_ID,
         @Body sensorData: Sensor
+    )
+
+    @GET("my-sensors/{id}")
+    suspend fun getSensorById(
+        @Header("user-id") userId: String = USER_ID,
+        @Path("id") sensorId: String
+    ): Sensor
+
+    @DELETE("my-sensor/{id}")
+    suspend fun deleteSensorById(
+        @Header("user-id") userId: String = USER_ID,
+        @Path("id") sensorId: String
     )
 }
 
