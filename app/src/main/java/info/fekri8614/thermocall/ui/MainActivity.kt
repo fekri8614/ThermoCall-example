@@ -35,12 +35,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri8614.thermocall.di.myModule
-import info.fekri8614.thermocall.ui.feature.ShowSensorScreen
+import info.fekri8614.thermocall.ui.feature.showSensor.ShowSensorScreen
 import info.fekri8614.thermocall.ui.feature.aboutUs.AboutUsScreen
 import info.fekri8614.thermocall.ui.feature.dashboard.DashboardScreen
 import info.fekri8614.thermocall.ui.feature.signUp.SignUpScreen
@@ -54,7 +52,6 @@ import info.fekri8614.thermocall.util.IS_USER_FIRST_TIME
 import info.fekri8614.thermocall.util.KEY_SHOW_SENSOR
 import info.fekri8614.thermocall.util.MyScreens
 import org.koin.android.ext.koin.androidContext
-import kotlin.properties.Delegates
 
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth

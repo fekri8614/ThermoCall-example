@@ -4,7 +4,7 @@ import info.fekri8614.thermocall.model.data.ThermoCall
 
 const val IS_USER_FIRST_TIME = "IsUsersFirstTime"
 
-const val BASE_URL = "https://thermocall-api.rubikamp.org/api/v1/"
+const val BASE_URL = "https://thermocall-api.rubikamp.org/api/v1"
 const val USER_ID = "0SGvUxSRWbXx17hLj9iWAIznLYp2";
 
 const val KEY_USER_EMAIL = "keyUserEmail"

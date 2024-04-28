@@ -12,38 +12,45 @@ import retrofit2.http.*
 interface ApiService {
     // https://thermocall-api.rubikamp.org/api/v1/
 
-    @GET("my-sensors/")
+    @GET("/my-sensors")
     suspend fun getAllSensors(
         @Header("user-id") userId: String = USER_ID
     ): SensorsResponse
 
-    @POST("send/")
-    suspend fun sendMessage(
-        @Body body: SendMessageDto
-    )
-
-    @POST("broadcast/")
-    suspend fun broadcast(
-        @Body body: SendMessageDto
-    )
-
-    @POST("my-sensors/")
-    suspend fun createSensor(
-        @Header("user-id") userId: String = USER_ID,
-        @Body sensorData: Sensor
-    )
-
-    @GET("my-sensors/{id}")
+    @GET("/my-sensors/{id}")
     suspend fun getSensorById(
         @Header("user-id") userId: String = USER_ID,
         @Path("id") sensorId: String
     ): Sensor
 
-    @DELETE("my-sensor/{id}")
+    @GET("/my-sensors/{id}/history")
+    suspend fun getSensorHistory(
+        @Header("user-id") userId: String = USER_ID,
+        @Path("id") sensorId: String
+    )
+
+    @POST("/send")
+    suspend fun sendMessage(
+        @Body body: SendMessageDto
+    )
+
+    @POST("/broadcast")
+    suspend fun broadcast(
+        @Body body: SendMessageDto
+    )
+
+    @POST("/my-sensors")
+    suspend fun createSensor(
+        @Header("user-id") userId: String = USER_ID,
+        @Body sensorData: Sensor
+    )
+
+    @DELETE("/my-sensor/{id}")
     suspend fun deleteSensorById(
         @Header("user-id") userId: String = USER_ID,
         @Path("id") sensorId: String
     )
+
 }
 
 fun createApiService(): ApiService {
