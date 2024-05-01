@@ -8,6 +8,7 @@ import info.fekri8614.thermocall.model.repository.thermocall.SensorRepositoryImp
 import info.fekri8614.thermocall.model.repository.user.UserRepository
 import info.fekri8614.thermocall.model.repository.user.UserRepositoryImpl
 import info.fekri8614.thermocall.ui.feature.dashboard.DashboardViewModel
+import info.fekri8614.thermocall.ui.feature.dashboard.DashboardWidget
 import info.fekri8614.thermocall.ui.feature.signUp.SignUpViewModel
 import info.fekri8614.thermocall.ui.feature.signIn.SignInViewModel
 import info.fekri8614.thermocall.ui.feature.splashScreen.SplashViewModel

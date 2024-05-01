@@ -14,6 +14,7 @@ import info.fekri8614.thermocall.model.data.firebase.SendMessageDto
 import info.fekri8614.thermocall.model.data.sensor.Sensor
 import info.fekri8614.thermocall.model.repository.thermocall.SensorRepository
 import info.fekri8614.thermocall.util.coroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -65,7 +66,7 @@ class DashboardViewModel(
     }
 
     fun createSensor(sensor: Sensor) {
-        viewModelScope.launch(coroutineExceptionHandler) {
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
             try {
                 sensorRepository.createSensor(sensor)
             } catch (e: Exception) {
@@ -100,7 +101,7 @@ class DashboardViewModel(
     }
 
     fun setMessage(isBroadcast: Boolean) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
 
             val messageDto = SendMessageDto(
                 to = if (isBroadcast) null else state.remoteToken,
