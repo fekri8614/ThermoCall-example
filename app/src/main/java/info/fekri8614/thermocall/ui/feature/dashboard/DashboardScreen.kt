@@ -133,8 +133,7 @@ fun DashboardScreen() {
                         context = context,
                         dataSensor = dataSensors,
                         onSensorClicked = { id ->
-                            Log.i("DashboardScreen","SENSOR_USE_ID => $id")
-                            //navController.navigate(MyScreens.ShowSensorScreen.route + "/$id")
+                            navController.navigate(MyScreens.SetupScreen.route + "/$id")
                         }
                     )
                 }

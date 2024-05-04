@@ -101,7 +101,7 @@ class DashboardViewModel(
     }
 
     fun setMessage(isBroadcast: Boolean) {
-        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+        viewModelScope.launch(coroutineExceptionHandler) {
 
             val messageDto = SendMessageDto(
                 to = if (isBroadcast) null else state.remoteToken,

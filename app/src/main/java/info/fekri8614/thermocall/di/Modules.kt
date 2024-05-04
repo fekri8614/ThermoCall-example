@@ -9,6 +9,7 @@ import info.fekri8614.thermocall.model.repository.user.UserRepository
 import info.fekri8614.thermocall.model.repository.user.UserRepositoryImpl
 import info.fekri8614.thermocall.ui.feature.dashboard.DashboardViewModel
 import info.fekri8614.thermocall.ui.feature.dashboard.DashboardWidget
+import info.fekri8614.thermocall.ui.feature.setup.SetupViewModel
 import info.fekri8614.thermocall.ui.feature.signUp.SignUpViewModel
 import info.fekri8614.thermocall.ui.feature.signIn.SignInViewModel
 import info.fekri8614.thermocall.ui.feature.splashScreen.SplashViewModel
@@ -28,5 +29,6 @@ val myModule = module {
     viewModel { SignUpViewModel(get(), get()) }
     viewModel { DashboardViewModel(get()) }
     viewModel { SplashViewModel(get()) }
+    viewModel { SetupViewModel(get()) }
 
 }

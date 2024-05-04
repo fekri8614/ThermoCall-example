@@ -34,11 +34,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.google.firebase.auth.FirebaseAuth
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri8614.thermocall.di.myModule
-import info.fekri8614.thermocall.ui.feature.showSensor.ShowSensorScreen
 import info.fekri8614.thermocall.ui.feature.aboutUs.AboutUsScreen
 import info.fekri8614.thermocall.ui.feature.dashboard.DashboardScreen
 import info.fekri8614.thermocall.ui.feature.signUp.SignUpScreen
@@ -54,7 +52,6 @@ import info.fekri8614.thermocall.util.MyScreens
 import org.koin.android.ext.koin.androidContext
 
 class MainActivity : ComponentActivity() {
-    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -143,16 +140,11 @@ fun MainAppUi(isFirstTime: Boolean) {
             NoInternetScreen()
         }
 
-        composable(route = MyScreens.SetupScreen.route) {
-            SetupScreen()
-        }
-        composable(
-            route = MyScreens.ShowSensorScreen.route + "/${KEY_SHOW_SENSOR}",
+        composable(route = MyScreens.SetupScreen.route + "/{$KEY_SHOW_SENSOR}",
             arguments = listOf(navArgument(KEY_SHOW_SENSOR) {
                 type = NavType.StringType
-            })
-            ) {
-            ShowSensorScreen(it.arguments!!.getString(KEY_SHOW_SENSOR, "null"))
+            })) {
+            SetupScreen(it.arguments!!.getString(KEY_SHOW_SENSOR, "null"))
         }
     }
 }
@@ -172,13 +164,12 @@ fun NoInternetScreen() {
         ) {
             Icon(
                 Icons.Default.Search,
-                contentDescription = "Attention",
+                contentDescription = "Looking for Internet Connection",
                 modifier = Modifier
                     .size(32.dp)
                     .padding(8.dp),
                 tint = Color.Red,
             )
-
             Text("Looking for Internet Connection!")
         }
     }

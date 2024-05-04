@@ -1,8 +1,11 @@
 package info.fekri8614.thermocall.model.net
 
+import android.health.connect.datatypes.units.Temperature
 import info.fekri8614.thermocall.model.data.*
 import info.fekri8614.thermocall.model.data.firebase.SendMessageDto
 import info.fekri8614.thermocall.model.data.sensor.Sensor
+import info.fekri8614.thermocall.model.data.sensor.SensorTemperature
+import info.fekri8614.thermocall.model.data.sensor.SensorUpdated
 import info.fekri8614.thermocall.util.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -27,7 +30,7 @@ interface ApiService {
     suspend fun getSensorHistory(
         @Header("user-id") userId: String = USER_ID,
         @Path("id") sensorId: String
-    )
+    ): ArrayList<SensorTemperature>
 
     @POST("/send")
     suspend fun sendMessage(
@@ -45,10 +48,17 @@ interface ApiService {
         @Body sensorData: Sensor
     )
 
-    @DELETE("my-sensor/{id}")
+    @DELETE("my-sensors/{id}")
     suspend fun deleteSensorById(
         @Header("user-id") userId: String = USER_ID,
         @Path("id") sensorId: String
+    )
+
+    @PATCH("my-sensors/{id}")
+    suspend fun updateSensor(
+        @Header("user-id") userId: String = USER_ID,
+        @Path("id") sensorId: String,
+        @Body sensorData: SensorUpdated
     )
 
 }
