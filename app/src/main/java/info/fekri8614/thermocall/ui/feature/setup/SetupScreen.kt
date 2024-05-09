@@ -15,8 +15,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.RangeSlider
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -37,6 +39,7 @@ import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri8614.thermocall.ui.theme.CardBackground
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SetupScreen(sensorId: String) {
 
@@ -117,19 +120,29 @@ fun SetupScreen(sensorId: String) {
                 ) {
                     Text("Set Temperature Range")
                 }
-                Row(
-                    modifier = Modifier.fillMaxWidth(0.7f),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly
+                Spacer(modifier = Modifier.height(16.dp))
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Text("-65", style = TextStyle(fontSize = 18.sp))
-                    Card(
-                        backgroundColor = CardBackground,
-                        shape = CircleShape,
+                    Row(
+                        modifier = Modifier.fillMaxWidth(0.7f),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        Text("-60", style = TextStyle(fontSize = 18.sp), modifier = Modifier.padding(16.dp))
+                        Text(viewModel.sensorIdData.value.min, style = TextStyle(fontSize = 18.sp))
+                        Card(
+                            backgroundColor = CardBackground,
+                            shape = CircleShape,
+                        ) {
+                            Text("-60", style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Black), modifier = Modifier.padding(22.dp))
+                        }
+                        Text(viewModel.sensorIdData.value.max, style = TextStyle(fontSize = 18.sp))
                     }
-                    Text("-50", style = TextStyle(fontSize = 18.sp))
+
+                    RangeSlider(value = -100f..50f, onValueChange = {
+
+                    })
                 }
 
             }

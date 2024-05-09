@@ -21,6 +21,8 @@ class SetupViewModel(
     val sensorIdData = mutableStateOf(Sensor("", "", "", ""))
     val sensorLabel = MutableLiveData("")
 
+    val tempSliderPosition = mutableStateOf(sensorIdData.value.min..sensorIdData.value.max)
+
     fun clearData() {
         sensorLabel.value = ""
     }
