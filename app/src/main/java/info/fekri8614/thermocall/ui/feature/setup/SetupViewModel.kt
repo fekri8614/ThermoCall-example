@@ -20,8 +20,10 @@ class SetupViewModel(
     val sensorHistoryData = mutableStateOf<List<SensorTemperature>>(arrayListOf())
     val sensorIdData = mutableStateOf(Sensor("", "", "", ""))
     val sensorLabel = MutableLiveData("")
+    val sensorMinTemp = MutableLiveData(0)
+    val sensorMaxTemp = MutableLiveData(0)
 
-    val tempSliderPosition = mutableStateOf(sensorIdData.value.min..sensorIdData.value.max)
+    val tempSliderPosition = mutableStateOf<ClosedFloatingPointRange<Float>>(0f..0f)
 
     fun clearData() {
         sensorLabel.value = ""
@@ -32,19 +34,22 @@ class SetupViewModel(
             viewModelScope.launch(coroutineExceptionHandler) {
                 sensorIdData.value = sensorRepository.getSensorById(sensorId)
                 sensorLabel.value = sensorIdData.value.label
+                tempSliderPosition.value = ((sensorIdData.value.min.toFloat())..(sensorIdData.value.max.toFloat()))
+                sensorMinTemp.value = tempSliderPosition.value.start.toInt()
+                sensorMaxTemp.value = tempSliderPosition.value.endInclusive.toInt()
                 sensorHistoryData.value = sensorRepository.getSensorHistory(sensorId)
             }
         }
     }
 
-    fun onDataUpdated(sensorId: String, newLabel: String?, newMin: Int?, newMax: Int?) {
+    fun onDataUpdated(sensorId: String, newLabel: String?, newMin: Float?, newMax: Float?) {
         viewModelScope.launch(coroutineExceptionHandler) {
             sensorRepository.updateSensor(
                 sensorId = sensorId,
                 data = SensorUpdated(
                     label = newLabel ?: sensorIdData.value.label,
-                    min = newMin ?: sensorIdData.value.min.toInt(),
-                    max = newMax ?: sensorIdData.value.max.toInt()
+                    min = newMin?.toInt() ?: sensorIdData.value.min.toInt(),
+                    max = newMax?.toInt() ?: sensorIdData.value.max.toInt(),
                 )
             )
         }

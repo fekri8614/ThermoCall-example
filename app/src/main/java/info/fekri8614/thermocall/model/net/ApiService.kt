@@ -13,7 +13,7 @@ import retrofit2.http.*
 
 // Write http(s) requests here
 interface ApiService {
-    // https://thermocall-api.rubikamp.org/api/v1/
+    // https://thermocall-api.rubikamp.org/api/v1/my-sensors/{id}
 
     @GET("my-sensors")
     suspend fun getAllSensors(
