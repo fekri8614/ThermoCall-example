@@ -18,5 +18,5 @@ data class ThermoCall(
     @SerializedName("max")
     val max: Int,
     @SerializedName("currentTemperature")
-    val currentTemperature: SensorTemperature
+    val currentTemperature: SensorTemperature?
 )

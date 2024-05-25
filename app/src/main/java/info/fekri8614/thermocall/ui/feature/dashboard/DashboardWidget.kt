@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
@@ -37,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import info.fekri8614.thermocall.R
 import info.fekri8614.thermocall.model.data.ThermoCall
 import info.fekri8614.thermocall.ui.theme.BackgroundMain
+import info.fekri8614.thermocall.ui.theme.CardBackground
 import info.fekri8614.thermocall.ui.theme.PrimaryDarkColor
 import info.fekri8614.thermocall.ui.theme.Shapes
 import info.fekri8614.thermocall.util.MyAnimShower
@@ -130,9 +133,23 @@ class DashboardWidget {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(data.label)
-                Column {
-                    Text("Min: ${data.min}")
-                    Text("Max: ${data.max}")
+                Row(
+                    modifier = Modifier.width(130.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Text("${data.min}", style = TextStyle(fontSize = 18.sp))
+                    Card(
+                        backgroundColor = CardBackground,
+                        shape = CircleShape,
+                    ) {
+                        Text(
+                            (data.currentTemperature?.temperature ?: 0).toString(),
+                            style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Black),
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
+                    Text("${data.max}", style = TextStyle(fontSize = 18.sp))
                 }
             }
         }
