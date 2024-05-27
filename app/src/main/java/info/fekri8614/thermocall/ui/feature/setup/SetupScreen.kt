@@ -39,8 +39,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
+import info.fekri8614.thermocall.ui.theme.BackgroundColor
 import info.fekri8614.thermocall.ui.theme.CardBackground
-import info.fekri8614.thermocall.ui.theme.PrimaryDarkColor
+import info.fekri8614.thermocall.ui.theme.PrimaryColor
+import info.fekri8614.thermocall.ui.theme.SensorItemBackground
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -140,7 +142,7 @@ fun SetupScreen(sensorId: String) {
                         ) {
                             Text("${sensorMinTemp.value}", style = TextStyle(fontSize = 18.sp))
                             Card(
-                                backgroundColor = CardBackground,
+                                backgroundColor = SensorItemBackground,
                                 shape = CircleShape,
                             ) {
                                 Text(
@@ -172,7 +174,7 @@ fun SetupScreen(sensorId: String) {
                 ) {
                     OutlinedButton(onClick = {
                         Toast.makeText(context, "Cancel clicked", Toast.LENGTH_SHORT).show()
-                    }, modifier = Modifier.fillMaxWidth(0.45f), border = BorderStroke(2.dp, PrimaryDarkColor)
+                    }, modifier = Modifier.fillMaxWidth(0.45f), border = BorderStroke(2.dp, PrimaryColor)
                     ) {
                         Text("Cancel", modifier = Modifier.padding(4.dp))
                     }

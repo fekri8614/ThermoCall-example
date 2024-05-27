@@ -44,7 +44,7 @@ import info.fekri8614.thermocall.ui.feature.profile.ProfileScreen
 import info.fekri8614.thermocall.ui.feature.setup.SetupScreen
 import info.fekri8614.thermocall.ui.feature.signIn.SignInScreen
 import info.fekri8614.thermocall.ui.feature.splashScreen.SplashScreen
-import info.fekri8614.thermocall.ui.theme.BackgroundMain
+import info.fekri8614.thermocall.ui.theme.PrimaryColor
 import info.fekri8614.thermocall.ui.theme.ThermoCallTheme
 import info.fekri8614.thermocall.util.IS_USER_FIRST_TIME
 import info.fekri8614.thermocall.util.KEY_SHOW_SENSOR
@@ -57,8 +57,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // Set directionality
         window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
-        // Request permissions
-        requestNotificationPermission()
 
         // Check if user's first time
         val sharedPreferences = getSharedPreferences("my_fist_t_checker_sh", Context.MODE_PRIVATE)
@@ -79,13 +77,19 @@ class MainActivity : ComponentActivity() {
             ) {
                 ThermoCallTheme {
                     Surface(
-                        modifier = Modifier.fillMaxSize(), color = BackgroundMain
+                        modifier = Modifier.fillMaxSize(), color = PrimaryColor
                     ) {
                         MainAppUi(isFirstTime)
                     }
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Request permissions
+        requestNotificationPermission()
     }
 
     private fun requestNotificationPermission() {
@@ -153,7 +157,7 @@ fun MainAppUi(isFirstTime: Boolean) {
 fun NoInternetScreen() {
     val uiController = rememberSystemUiController()
     SideEffect {
-        uiController.setStatusBarColor(BackgroundMain)
+        uiController.setStatusBarColor(PrimaryColor)
     }
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

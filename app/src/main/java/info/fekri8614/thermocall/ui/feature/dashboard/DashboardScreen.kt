@@ -1,6 +1,5 @@
 package info.fekri8614.thermocall.ui.feature.dashboard
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,8 +17,10 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -38,8 +39,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri8614.thermocall.model.data.sensor.Sensor
-import info.fekri8614.thermocall.ui.theme.BackgroundMain
-import info.fekri8614.thermocall.ui.theme.PrimaryDarkColor
+import info.fekri8614.thermocall.ui.theme.BackgroundColor
+import info.fekri8614.thermocall.ui.theme.PrimaryColor
 import info.fekri8614.thermocall.util.MyScreens
 import info.fekri8614.thermocall.util.ShowAlertDialog
 import info.fekri8614.thermocall.util.ShowWithBodyDialog
@@ -58,12 +59,6 @@ fun DashboardScreen() {
     val scope = rememberCoroutineScope()
 
     val dataSensors = viewModel.dataSensors.value
-
-    val uiController = rememberSystemUiController()
-
-    SideEffect {
-        uiController.setStatusBarColor(PrimaryDarkColor)
-    }
 
     dashboardWidget.apply {
         Scaffold(
@@ -92,15 +87,16 @@ fun DashboardScreen() {
                     navController.navigate(id)
                 }
             },
-            backgroundColor = BackgroundMain,
+            backgroundColor = BackgroundColor,
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = { viewModel.showAddSensorDialog.value = true },
                     content = {
                         Icon(
-                            Icons.Default.AddCircle,
+                            Icons.Rounded.Add,
                             contentDescription = "Add New Device",
-                            modifier = Modifier.size(60.dp)
+                            modifier = Modifier.size(40.dp),
+                            tint = Color.White
                         )
                     }
                 )
@@ -192,8 +188,6 @@ fun DashboardScreen() {
                                 viewModel.createSensor(newSensor)
                                 viewModel.clearNewSensorData()
                                 viewModel.showAddSensorDialog.value = false
-                            } else {
-                                viewModel.clearNewSensorData()
                                 viewModel.showAddSensorDialog.value = false
                                 Toast.makeText(
                                     context,

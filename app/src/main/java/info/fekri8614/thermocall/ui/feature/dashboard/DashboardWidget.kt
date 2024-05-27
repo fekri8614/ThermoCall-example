@@ -1,7 +1,6 @@
 package info.fekri8614.thermocall.ui.feature.dashboard
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,9 +39,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import info.fekri8614.thermocall.R
 import info.fekri8614.thermocall.model.data.ThermoCall
-import info.fekri8614.thermocall.ui.theme.BackgroundMain
+import info.fekri8614.thermocall.ui.theme.BackgroundColor
+import info.fekri8614.thermocall.ui.theme.PrimaryColor
 import info.fekri8614.thermocall.ui.theme.CardBackground
-import info.fekri8614.thermocall.ui.theme.PrimaryDarkColor
+import info.fekri8614.thermocall.ui.theme.PrimaryVariant
+import info.fekri8614.thermocall.ui.theme.SensorItemBackground
 import info.fekri8614.thermocall.ui.theme.Shapes
 import info.fekri8614.thermocall.util.MyAnimShower
 import info.fekri8614.thermocall.util.MyScreens
@@ -58,30 +59,28 @@ class DashboardWidget {
         dataSensor: List<ThermoCall>,
         onSensorClicked: (String) -> Unit
     ) {
-        Box {
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                if (viewModel.showProgress.value)
-                    LinearProgressIndicator(modifier = modifier.fillMaxWidth())
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (viewModel.showProgress.value)
+                LinearProgressIndicator(modifier = modifier.fillMaxWidth())
 
-                Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-                if (NetworkChecker(context).isInternetConnected) {
-                    SensorItemList(data = dataSensor) { id ->
-                        if (NetworkChecker(context).isInternetConnected) {
-                            onSensorClicked.invoke(id)
-                        } else {
-                            viewModel.showNetDialog.value = true
-                        }
+            if (NetworkChecker(context).isInternetConnected) {
+                SensorItemList(data = dataSensor) { id ->
+                    if (NetworkChecker(context).isInternetConnected) {
+                        onSensorClicked.invoke(id)
+                    } else {
+                        viewModel.showNetDialog.value = true
                     }
-                } else {
-                    MyAnimShower(name = R.raw.loading_anim)
-                    viewModel.showNetDialog.value = true
                 }
+            } else {
+                MyAnimShower(name = R.raw.loading_anim)
+                viewModel.showNetDialog.value = true
             }
         }
     }
@@ -95,7 +94,7 @@ class DashboardWidget {
         Surface(
             modifier = modifier
                 .fillMaxWidth(),
-            color = BackgroundMain
+            color = BackgroundColor
         ) {
             LazyColumn(
                 modifier = modifier.padding(top = 8.dp),
@@ -123,9 +122,8 @@ class DashboardWidget {
                 .clickable {
                     onSensorClicked.invoke(data.id)
                 },
-            border = BorderStroke(2.dp, Color.Black),
-            elevation = 3.dp,
-            backgroundColor = BackgroundMain
+            elevation = 1.dp,
+            backgroundColor = SensorItemBackground
         ) {
             Row(
                 modifier = modifier
@@ -142,9 +140,9 @@ class DashboardWidget {
                 ) {
                     Text("${data.min}", style = TextStyle(fontSize = 18.sp))
                     Card(
-                        backgroundColor = CardBackground,
+                        backgroundColor = SensorItemBackground,
                         shape = CircleShape,
-                        modifier =  Modifier.size(60.dp)
+                        modifier =  Modifier.size(60.dp),
                     ) {
                         Text(
                             (data.currentTemperature?.temperature ?: 0).toString(),
@@ -164,14 +162,14 @@ class DashboardWidget {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(BackgroundMain),
+                .background(BackgroundColor),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Column {
                 Column(
                     modifier = Modifier
-                        .background(PrimaryDarkColor)
+                        .background(PrimaryColor)
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.Center
@@ -215,7 +213,7 @@ class DashboardWidget {
                 Text(
                     text = "ThermoCall co.",
                     fontSize = 16.sp,
-                    color = PrimaryDarkColor,
+                    color = PrimaryVariant,
                     fontWeight = FontWeight.Bold
                 )
             }

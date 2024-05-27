@@ -5,26 +5,35 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
-import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-private val LightColors = lightColors(
-    primary = PrimaryDarkColor, secondary = PrimaryDarkColor, background = BackgroundMain
+//private val LightColors = lightColors(
+//    primary = PrimaryDarkColor, secondary = SecondaryColor, background = PrimaryColor
+//)
+
+private val LightColorPalette = lightColors(
+    primary = PrimaryColor,
+    primaryVariant = PrimaryVariant,
+    secondary = SecondaryColor,
+    background = BackgroundColor,
+    surface = Color.White,
+    onPrimary = Color.White,
+    onSecondary = Color.White,
+    onBackground = Color.Black,
+    onSurface = Color.Black
 )
 
 @Composable
 fun ThermoCallTheme(content: @Composable () -> Unit) {
 
     MaterialTheme(
-        colors = LightColors, typography = Typography, content = content, shapes = Shapes
+        colors = LightColorPalette, typography = Typography, content = content, shapes = Shapes
     )
 
     val uiController = rememberSystemUiController()
 
     SideEffect {
-        uiController.setSystemBarsColor(BackgroundMain)
-        uiController.setNavigationBarColor(BackgroundMain)
+        uiController.setStatusBarColor(BackgroundColor)
     }
-
 
 }

@@ -28,9 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import info.fekri8614.thermocall.R
-import info.fekri8614.thermocall.ui.theme.BlueBackground
 import info.fekri8614.thermocall.ui.theme.BlueLightBack
-import info.fekri8614.thermocall.ui.theme.TextLightColor
+import info.fekri8614.thermocall.ui.theme.GrayLightColor
 
 @Composable
 fun ProfileScreen() {
@@ -104,14 +103,14 @@ fun ProfileScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(1.dp)
-                .background(TextLightColor)
+                .background(GrayLightColor)
         )
         Spacer(
             modifier = Modifier.height(32.dp)
         )
         Column {
             Text("Shared with", fontSize = 20.sp, fontWeight = FontWeight.Black)
-            Text("Shared with no one, yet.", style = TextStyle(color = TextLightColor))
+            Text("Shared with no one, yet.", style = TextStyle(color = GrayLightColor))
         }
         Spacer(
             modifier = Modifier.height(32.dp)
