@@ -1,11 +1,11 @@
 package info.fekri8614.thermocall.ui.feature.dashboard
 
 import android.content.Context
-import androidx.compose.foundation.BorderStroke
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -41,16 +41,17 @@ import info.fekri8614.thermocall.R
 import info.fekri8614.thermocall.model.data.ThermoCall
 import info.fekri8614.thermocall.ui.theme.BackgroundColor
 import info.fekri8614.thermocall.ui.theme.PrimaryColor
-import info.fekri8614.thermocall.ui.theme.CardBackground
 import info.fekri8614.thermocall.ui.theme.PrimaryVariant
 import info.fekri8614.thermocall.ui.theme.SensorItemBackground
 import info.fekri8614.thermocall.ui.theme.Shapes
 import info.fekri8614.thermocall.util.MyAnimShower
+import info.fekri8614.thermocall.util.MyDateFormatter
 import info.fekri8614.thermocall.util.MyScreens
 import info.fekri8614.thermocall.util.NetworkChecker
 
 class DashboardWidget {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun MainScreenBody(
         modifier: Modifier,
@@ -85,6 +86,8 @@ class DashboardWidget {
         }
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun SensorItemList(
         modifier: Modifier = Modifier,
@@ -108,6 +111,8 @@ class DashboardWidget {
         }
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun SensorItem(
         modifier: Modifier = Modifier,
@@ -132,7 +137,11 @@ class DashboardWidget {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(data.label)
+                Column (horizontalAlignment = Alignment.Start){
+                    Text(data.label, style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium))
+                    Text((MyDateFormatter().getMinuteValue(data.currentTemperature?.timestamp ?: "2024-05-27T12:02:27.664Z")).toString() + " minutes ago", fontSize = 12.sp)
+                }
+
                 Row(
                     modifier = Modifier.width(130.dp),
                     verticalAlignment = Alignment.CenterVertically,

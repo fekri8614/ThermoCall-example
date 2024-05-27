@@ -1,6 +1,8 @@
 package info.fekri8614.thermocall.ui.feature.dashboard
 
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,14 +19,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -33,19 +32,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri8614.thermocall.model.data.sensor.Sensor
 import info.fekri8614.thermocall.ui.theme.BackgroundColor
-import info.fekri8614.thermocall.ui.theme.PrimaryColor
 import info.fekri8614.thermocall.util.MyScreens
 import info.fekri8614.thermocall.util.ShowAlertDialog
 import info.fekri8614.thermocall.util.ShowWithBodyDialog
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DashboardScreen() {
     val dashboardWidget = DashboardWidget()
@@ -73,7 +72,7 @@ fun DashboardScreen() {
                         }
                     },
                     title = {
-                        Text("ThermoCall")
+                        Text("ThermoCall", textAlign = TextAlign.Center)
                     },
                     elevation = 1.dp,
                 )
