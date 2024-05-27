@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,10 +23,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import info.fekri8614.thermocall.R
+import info.fekri8614.thermocall.ui.theme.BlueBackground
+import info.fekri8614.thermocall.ui.theme.BlueLightBack
+import info.fekri8614.thermocall.ui.theme.TextLightColor
 
 @Composable
 fun ProfileScreen() {
@@ -45,7 +50,7 @@ fun ProfileScreen() {
                 color = Color.Transparent,
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.astro_img),
+                    painter = painterResource(id = R.drawable.person_image),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                 )
@@ -55,14 +60,27 @@ fun ProfileScreen() {
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Center,
             ) {
-                Text(
-                    "Alireza Hatami",
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Black,
-                        color = Color(0xFF283593),
-                    ),
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        "Alireza Hatami",
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Black,
+                        ),
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        "Owner".uppercase(),
+                        modifier = Modifier
+                            .background(BlueLightBack)
+                            .padding(2.dp),
+                        style = TextStyle(
+                            fontWeight = FontWeight.Bold, fontSize = 14.sp, fontStyle = FontStyle.Italic
+                        ),
+                    )
+                }
                 Text(
                     "Lab Technician",
                     style = TextStyle(
@@ -80,7 +98,28 @@ fun ProfileScreen() {
             }
         }
         Spacer(
-            modifier = Modifier.fillMaxWidth().height(1.dp).background(Color.Gray)
+            modifier = Modifier.height(16.dp)
         )
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(TextLightColor)
+        )
+        Spacer(
+            modifier = Modifier.height(32.dp)
+        )
+        Column {
+            Text("Shared with", fontSize = 20.sp, fontWeight = FontWeight.Black)
+            Text("Shared with no one, yet.", style = TextStyle(color = TextLightColor))
+        }
+        Spacer(
+            modifier = Modifier.height(32.dp)
+        )
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            TextButton(onClick = { /*TODO*/ }, modifier=Modifier.fillMaxWidth(0.7f)) {
+                Text("Start sharing".uppercase(), style=  TextStyle(), modifier = Modifier.padding(8.dp))
+            }
+        }
     }
 }
