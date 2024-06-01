@@ -10,5 +10,7 @@ data class Sensor(
     @SerializedName("min")
     val min: String,
     @SerializedName("max")
-    val max: String
+    val max: String,
+    @SerializedName("currentTemperature")
+    val currentTemperature: SensorTemperature?
 )

@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
@@ -26,6 +28,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -167,87 +170,6 @@ class DashboardWidget {
     }
 
     @Composable
-    fun DrawerContent(onItemClicked: (String) -> Unit) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(BackgroundColor),
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Column {
-                Column(
-                    modifier = Modifier
-                        .background(PrimaryColor)
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-
-                        Text(
-                            text = "ThermoCall", style = TextStyle(
-                                fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.White
-                            )
-                        )
-                        Text(
-                            text = "A real-time temperature monitoring and alarming system for lab freezers",
-                            color = Color.White
-                        )
-                    }
-
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                DrawerItem(text = "Profile",
-                    onItemClick = { onItemClicked.invoke(MyScreens.ProfileScreen.route) })
-
-                DrawerItem(text = "Setup",
-                    onItemClick = { onItemClicked.invoke(MyScreens.SetupScreen.route) })
-
-                DrawerItem(text = "About Us",
-                    onItemClick = { onItemClicked.invoke(MyScreens.AboutUsScreen.route) })
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 16.dp)
-            ) {
-                Text(
-                    text = "Developed by ", fontSize = 14.sp, color = Color.Black
-                )
-                Text(
-                    text = "ThermoCall co.",
-                    fontSize = 16.sp,
-                    color = PrimaryVariant,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-        }
-    }
-
-    @Composable
-    fun DrawerItem(text: String, onItemClick: () -> Unit) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .clickable { onItemClick() },
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = text,
-                style = MaterialTheme.typography.subtitle1,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-        }
-    }
-
-    @Composable
     fun MainTextField(
         edtValue: String,
         icon: ImageVector,
@@ -290,6 +212,20 @@ class DashboardWidget {
         }
         MainTextField(edtValue = max, icon = Icons.Default.Create, hint = "Max") { nMax ->
             onMaxChanged.invoke(nMax)
+        }
+    }
+
+    @Composable
+    fun DropDownMenuItem(title: String, icon: ImageVector, backgroundColor: Color = MaterialTheme.colors.background, showTick: Boolean = false, onClicked : () -> Unit) {
+        DropdownMenuItem(
+            modifier = Modifier.size(width = 200.dp, height = 60.dp).background(backgroundColor),
+            onClick = onClicked,
+        ) {
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+                if(showTick) Icon(Icons.Default.Check, contentDescription = "")
+                Text(title)
+                Icon(icon, contentDescription = title)
+            }
         }
     }
 }

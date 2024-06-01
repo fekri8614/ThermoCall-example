@@ -33,7 +33,10 @@ fun ThermoCallTheme(content: @Composable () -> Unit) {
     val uiController = rememberSystemUiController()
 
     SideEffect {
-        uiController.setStatusBarColor(BackgroundColor)
+        uiController.apply {
+            setStatusBarColor(BackgroundColor)
+            setNavigationBarColor(BackgroundColorV2)
+        }
     }
 
 }

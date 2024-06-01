@@ -28,7 +28,8 @@ class SensorRepositoryImpl(
                 sensorId = body.sensorId,
                 label = body.label,
                 min = body.min,
-                max = body.max
+                max = body.max,
+                currentTemperature = body.currentTemperature
             )
         )
     }

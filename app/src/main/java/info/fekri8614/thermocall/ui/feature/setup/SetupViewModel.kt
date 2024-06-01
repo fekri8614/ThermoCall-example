@@ -18,7 +18,7 @@ class SetupViewModel(
     val menuExpanded = mutableStateOf(false)
 
     val sensorHistoryData = mutableStateOf<List<SensorTemperature>>(arrayListOf())
-    val sensorIdData = mutableStateOf(Sensor("", "", "", ""))
+    val sensorIdData = mutableStateOf(Sensor("", "", "", "", currentTemperature = null))
     val sensorLabel = MutableLiveData("")
     val sensorMinTemp = MutableLiveData(0)
     val sensorMaxTemp = MutableLiveData(0)

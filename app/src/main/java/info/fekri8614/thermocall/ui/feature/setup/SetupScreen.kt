@@ -1,5 +1,6 @@
 package info.fekri8614.thermocall.ui.feature.setup
 
+import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -32,6 +33,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -39,8 +41,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
-import info.fekri8614.thermocall.ui.theme.BackgroundColor
-import info.fekri8614.thermocall.ui.theme.CardBackground
 import info.fekri8614.thermocall.ui.theme.PrimaryColor
 import info.fekri8614.thermocall.ui.theme.SensorItemBackground
 
@@ -50,6 +50,7 @@ fun SetupScreen(sensorId: String) {
 
     val context = LocalContext.current
     val navController = getNavController()
+    val config = LocalConfiguration.current
 
     val viewModel = getNavViewModel<SetupViewModel>()
     val setupWidget = SetupWidget(viewModel)
@@ -61,9 +62,12 @@ fun SetupScreen(sensorId: String) {
     setupWidget.apply {
         Scaffold(
             topBar = {
+                val padding = if(config.orientation == Configuration.ORIENTATION_LANDSCAPE) 0.dp else ((config.screenWidthDp.dp) / 4)
                 TopAppBar(
                     modifier = Modifier.fillMaxWidth(),
-                    title = { Text("Setup") },
+                    backgroundColor = Color.White,
+                    elevation = 0.dp,
+                    title = { Text("Setup", modifier = Modifier.padding(start = padding)) },
                     navigationIcon = {
                         IconButton(onClick = {
                             viewModel.clearData()
@@ -146,7 +150,7 @@ fun SetupScreen(sensorId: String) {
                                 shape = CircleShape,
                             ) {
                                 Text(
-                                    "-60",
+                                    (viewModel.sensorIdData.value.currentTemperature?.temperature ?: 0).toString(),
                                     style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Black),
                                     modifier = Modifier.padding(22.dp)
                                 )
@@ -173,7 +177,7 @@ fun SetupScreen(sensorId: String) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     OutlinedButton(onClick = {
-                        Toast.makeText(context, "Cancel clicked", Toast.LENGTH_SHORT).show()
+                        navController.popBackStack()
                     }, modifier = Modifier.fillMaxWidth(0.45f), border = BorderStroke(2.dp, PrimaryColor)
                     ) {
                         Text("Cancel", modifier = Modifier.padding(4.dp))

@@ -26,6 +26,7 @@ class DashboardViewModel(
 ) : ViewModel() {
     val showProgress = mutableStateOf(false)
     val dataSensors = mutableStateOf<List<ThermoCall>>(listOf())
+    val showDropDownMenu = mutableStateOf(false)
 
     val sensorId = MutableLiveData("")
     val sensorLabel = MutableLiveData("")

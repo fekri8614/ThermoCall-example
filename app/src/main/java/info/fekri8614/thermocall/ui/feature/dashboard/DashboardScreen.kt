@@ -1,15 +1,22 @@
 package info.fekri8614.thermocall.ui.feature.dashboard
 
+import android.content.res.Configuration
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.DrawerValue
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.FabPosition
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -19,30 +26,34 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.rememberDrawerState
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri8614.thermocall.model.data.sensor.Sensor
 import info.fekri8614.thermocall.ui.theme.BackgroundColor
+import info.fekri8614.thermocall.ui.theme.BackgroundColorV2
 import info.fekri8614.thermocall.util.MyScreens
 import info.fekri8614.thermocall.util.ShowAlertDialog
 import info.fekri8614.thermocall.util.ShowWithBodyDialog
-import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -53,38 +64,59 @@ fun DashboardScreen() {
     val viewModel = getNavViewModel<DashboardViewModel>()
     val navController = getNavController()
 
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scaffoldState = rememberScaffoldState(drawerState = drawerState)
-    val scope = rememberCoroutineScope()
-
     val dataSensors = viewModel.dataSensors.value
+
+    val config = LocalConfiguration.current
 
     dashboardWidget.apply {
         Scaffold(
-            scaffoldState = scaffoldState,
             topBar = {
                 TopAppBar(
-                    navigationIcon = {
+                    backgroundColor = Color.White,
+                    actions = {
                         IconButton(onClick = {
-                            scope.launch { scaffoldState.drawerState.open() }
+                            viewModel.showDropDownMenu.value = !viewModel.showDropDownMenu.value
                         }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Menu")
+                            Icon(Icons.Default.MoreVert, contentDescription = "Menu")
+                        }
+                        DropdownMenu(
+                            expanded = viewModel.showDropDownMenu.value,
+                            onDismissRequest = { viewModel.showDropDownMenu.value = false },
+
+                        ) {
+                            DropDownMenuItem(
+                                title = "Edit List",
+                                icon = Icons.Default.Create,
+                                onClicked = {}
+                            )
+                            DropDownMenuItem(
+                                title = "Celsius",
+                                icon = Icons.Default.Star,
+                                backgroundColor = BackgroundColorV2,
+                                showTick = true,
+                                onClicked = {}
+                            )
+                            DropDownMenuItem(
+                                title = "Fahrenheit",
+                                icon = Icons.Default.FavoriteBorder,
+                                onClicked = {}
+                            )
+                            DropDownMenuItem(
+                                title = "Report Issue",
+                                icon = Icons.Default.Send,
+                                onClicked = {}
+                            )
                         }
                     },
                     title = {
-                        Text("ThermoCall", textAlign = TextAlign.Center)
+                        val padding = if(config.orientation == Configuration.ORIENTATION_LANDSCAPE) 0.dp else ((config.screenWidthDp.dp) / 3)
+                        Text("ThermoCall", textAlign = TextAlign.Center, modifier = Modifier.padding(start = padding))
                     },
-                    elevation = 1.dp,
+                    elevation = 0.dp,
                 )
             },
-            drawerContent = {
-                DrawerContent { id ->
-                    scope.launch {
-                        scaffoldState.drawerState.close()
-                    }
+            bottomBar = {
 
-                    navController.navigate(id)
-                }
             },
             backgroundColor = BackgroundColor,
             floatingActionButton = {
@@ -122,6 +154,7 @@ fun DashboardScreen() {
                         )
                     }
                 } else {
+                    /// TODO: Set the condition background color
                     MainScreenBody(
                         modifier = Modifier.padding(it),
                         viewModel = viewModel,
@@ -182,7 +215,8 @@ fun DashboardScreen() {
                                     sensorId = viewModel.sensorId.value!!,
                                     label = viewModel.sensorLabel.value!!,
                                     min = viewModel.sensorMin.value!!,
-                                    max = viewModel.sensorMax.value!!
+                                    max = viewModel.sensorMax.value!!,
+                                    currentTemperature = null,
                                 )
                                 viewModel.createSensor(newSensor)
                                 viewModel.clearNewSensorData()
