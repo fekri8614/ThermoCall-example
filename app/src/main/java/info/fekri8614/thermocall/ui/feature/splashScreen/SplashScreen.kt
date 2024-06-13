@@ -15,7 +15,7 @@ import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri8614.thermocall.util.MyScreens
 
 @Composable
-fun SplashScreen(isFirstTime: Boolean) {
+fun SplashScreen() {
     val viewModel = getNavViewModel<SplashViewModel>()
     val navigation = getNavController()
 

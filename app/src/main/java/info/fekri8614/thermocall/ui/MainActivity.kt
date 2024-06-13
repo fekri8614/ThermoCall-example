@@ -1,15 +1,14 @@
 package info.fekri8614.thermocall.ui
 
 import android.Manifest
-import android.content.Context
-import android.content.SharedPreferences
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,41 +34,37 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.firebase.messaging.FirebaseMessaging
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri8614.thermocall.di.myModule
+import info.fekri8614.thermocall.model.firebase.ThermoCallFirebaseMessagingService
 import info.fekri8614.thermocall.ui.feature.aboutUs.AboutUsScreen
 import info.fekri8614.thermocall.ui.feature.dashboard.DashboardScreen
-import info.fekri8614.thermocall.ui.feature.signUp.SignUpScreen
 import info.fekri8614.thermocall.ui.feature.profile.ProfileScreen
 import info.fekri8614.thermocall.ui.feature.setup.SetupScreen
 import info.fekri8614.thermocall.ui.feature.signIn.SignInScreen
+import info.fekri8614.thermocall.ui.feature.signUp.SignUpScreen
 import info.fekri8614.thermocall.ui.feature.splashScreen.SplashScreen
 import info.fekri8614.thermocall.ui.theme.PrimaryColor
 import info.fekri8614.thermocall.ui.theme.ThermoCallTheme
-import info.fekri8614.thermocall.util.IS_USER_FIRST_TIME
 import info.fekri8614.thermocall.util.KEY_SHOW_SENSOR
 import info.fekri8614.thermocall.util.MyScreens
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+
+private const val LOG = "MainActivity"
 
 class MainActivity : ComponentActivity() {
-
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Set directionality
         window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
+    }
 
-        // Check if user's first time
-        val sharedPreferences = getSharedPreferences("my_fist_t_checker_sh", Context.MODE_PRIVATE)
-        val isFirstTime = sharedPreferences.getBoolean(IS_USER_FIRST_TIME, true)
-        if (isFirstTime) {
-            val editor: SharedPreferences.Editor = sharedPreferences.edit()
-            editor.putBoolean(IS_USER_FIRST_TIME, false)
-            editor.apply()
-        }
 
-        // UI stuff
+    override fun onStart() {
+        super.onStart()
         setContent {
             Koin(
                 appDeclaration = {
@@ -81,7 +76,7 @@ class MainActivity : ComponentActivity() {
                     Surface(
                         modifier = Modifier.fillMaxSize(), color = PrimaryColor
                     ) {
-                        MainAppUi(isFirstTime)
+                        MainAppUi()
                     }
                 }
             }
@@ -112,9 +107,8 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MainAppUi(isFirstTime: Boolean) {
+fun MainAppUi() {
     val controller = rememberNavController()
 
     KoinNavHost(navController = controller, startDestination = MyScreens.SplashScreen.route) {
@@ -140,7 +134,7 @@ fun MainAppUi(isFirstTime: Boolean) {
         }
 
         composable(route = MyScreens.SplashScreen.route) {
-            SplashScreen(isFirstTime)
+            SplashScreen()
         }
 
         composable(route = MyScreens.NoInternetScreen.route) {

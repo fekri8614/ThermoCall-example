@@ -54,7 +54,6 @@ import info.fekri8614.thermocall.util.NetworkChecker
 
 class DashboardWidget {
 
-    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun MainScreenBody(
         modifier: Modifier,
@@ -89,8 +88,6 @@ class DashboardWidget {
         }
     }
 
-
-    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun SensorItemList(
         modifier: Modifier = Modifier,
@@ -114,8 +111,6 @@ class DashboardWidget {
         }
     }
 
-
-    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun SensorItem(
         modifier: Modifier = Modifier,

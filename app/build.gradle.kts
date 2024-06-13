@@ -55,12 +55,12 @@ dependencies {
     val composeUiVersion = "1.4.0"
     val work_version = "2.9.0"
 
-    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.activity:activity-compose:1.7.1")
     implementation("androidx.compose.ui:ui:$composeUiVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeUiVersion")
-    implementation("androidx.compose.material:material:1.4.2")
+    implementation("androidx.compose.material:material:1.6.7")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -82,7 +82,7 @@ dependencies {
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1")
 
     // Koin
     implementation("dev.burnoo:cokoin:1.0.0")
@@ -100,7 +100,7 @@ dependencies {
     implementation("me.onebone:toolbar-compose:2.3.5")
 
     // Firebase BoM
-    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
 
     // Firebase Messaging
     implementation("com.google.firebase:firebase-messaging")

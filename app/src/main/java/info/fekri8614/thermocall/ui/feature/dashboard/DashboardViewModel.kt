@@ -1,16 +1,12 @@
 package info.fekri8614.thermocall.ui.feature.dashboard
 
 import android.util.Log
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.messaging.FirebaseMessaging
 import info.fekri8614.thermocall.model.data.ThermoCall
-import info.fekri8614.thermocall.model.data.firebase.ChatState
-import info.fekri8614.thermocall.model.data.firebase.NotificationBody
-import info.fekri8614.thermocall.model.data.firebase.SendMessageDto
 import info.fekri8614.thermocall.model.data.sensor.Sensor
 import info.fekri8614.thermocall.model.repository.thermocall.SensorRepository
 import info.fekri8614.thermocall.util.coroutineExceptionHandler
@@ -18,11 +14,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
+
+private const val TAG = "DashboardViewModel"
 
 class DashboardViewModel(
-    private val sensorRepository: SensorRepository,
+    private val sensorRepository: SensorRepository
 ) : ViewModel() {
     val showProgress = mutableStateOf(false)
     val dataSensors = mutableStateOf<List<ThermoCall>>(listOf())
@@ -39,29 +35,35 @@ class DashboardViewModel(
 
     val errorMessage = mutableStateOf("")
 
-    var state by mutableStateOf(ChatState())
-        private set
+    val fcmToken = mutableStateOf("")
 
     init {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if(task.isSuccessful) {
+                fcmToken.value = task.result
+            }
+        }
+
         getDataFromNet()
-        setMessage(isBroadcast = true)
     }
 
     fun getDataFromNet() {
-        viewModelScope.launch(coroutineExceptionHandler) {
-            while (isActive) {
-                try {
-                    showProgress.value = true
+        synchronized("") {
+            viewModelScope.launch(coroutineExceptionHandler) {
+                while (isActive) {
+                    try {
+//                        showProgress.value = true
+                        val sensorData = sensorRepository.getAllThermoCalls()
+                        sensorRepository.alarmSensor(fcmToken = fcmToken.value)
+                        dataSensors.value = sensorData
 
-                    val sensorData = sensorRepository.getAllThermoCalls()
-                    dataSensors.value = sensorData
-
-                    showProgress.value = false
-                } catch (e: Exception) {
-                    Log.e("DashboardViewModel", "Error fetching data: ", e)
-                    errorMessage.value = "Failed to fetch data: ${e.localizedMessage}"
+//                        showProgress.value = false
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error fetching data: ", e)
+                        errorMessage.value = "Failed to fetch data: ${e.localizedMessage}"
+                    }
+                    delay(2000) // Wait for 2 seconds before trying again
                 }
-                delay(5000) // Wait for 5 seconds before trying again
             }
         }
     }
@@ -71,64 +73,15 @@ class DashboardViewModel(
             try {
                 sensorRepository.createSensor(sensor)
             } catch (e: Exception) {
-                Log.e("DashboardViewModel", "Couldn't create sensor: $e")
+                Log.e(TAG, "Couldn't create sensor: $e")
             }
         }
     }
+
     fun clearNewSensorData() {
         sensorId.value = ""
         sensorLabel.value = ""
         sensorMin.value = ""
         sensorMax.value = ""
     }
-
-
-    fun onRemoteTokenChanged(newToken: String) {
-        state = state.copy(
-            remoteToken = newToken
-        )
-    }
-
-    fun onSubmitRemoteToken() {
-        state = state.copy(
-            isEnteringToken = false
-        )
-    }
-
-    fun onMessageChange(message: String) {
-        state = state.copy(
-            messageText = message
-        )
-    }
-
-    fun setMessage(isBroadcast: Boolean) {
-        viewModelScope.launch(coroutineExceptionHandler) {
-
-            val messageDto = SendMessageDto(
-                to = if (isBroadcast) null else state.remoteToken,
-                notification = NotificationBody(
-                    title = "New message!",
-                    body = state.messageText
-                )
-            )
-
-            try {
-                if (isBroadcast) {
-                    sensorRepository.broadcast(messageDto)
-                } else {
-                    sensorRepository.sendMessage(messageDto)
-                }
-
-                state = state.copy(
-                    messageText = ""
-                )
-            } catch (e: HttpException) {
-                e.printStackTrace()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-
-        }
-    }
-
 }

@@ -26,6 +26,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Info
@@ -49,13 +50,13 @@ import androidx.compose.ui.unit.sp
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri8614.thermocall.model.data.sensor.Sensor
+import info.fekri8614.thermocall.model.firebase.ThermoCallFirebaseMessagingService
 import info.fekri8614.thermocall.ui.theme.BackgroundColor
 import info.fekri8614.thermocall.ui.theme.BackgroundColorV2
 import info.fekri8614.thermocall.util.MyScreens
 import info.fekri8614.thermocall.util.ShowAlertDialog
 import info.fekri8614.thermocall.util.ShowWithBodyDialog
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DashboardScreen() {
     val dashboardWidget = DashboardWidget()
@@ -67,6 +68,8 @@ fun DashboardScreen() {
     val dataSensors = viewModel.dataSensors.value
 
     val config = LocalConfiguration.current
+
+    viewModel.getDataFromNet()
 
     dashboardWidget.apply {
         Scaffold(
@@ -103,7 +106,7 @@ fun DashboardScreen() {
                             )
                             DropDownMenuItem(
                                 title = "Report Issue",
-                                icon = Icons.Default.Send,
+                                icon = Icons.AutoMirrored.Filled.Send,
                                 onClicked = {}
                             )
                         }
@@ -155,6 +158,7 @@ fun DashboardScreen() {
                     }
                 } else {
                     /// TODO: Set the condition background color
+
                     MainScreenBody(
                         modifier = Modifier.padding(it),
                         viewModel = viewModel,

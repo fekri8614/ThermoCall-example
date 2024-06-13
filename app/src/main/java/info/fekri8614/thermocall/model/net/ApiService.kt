@@ -1,8 +1,8 @@
 package info.fekri8614.thermocall.model.net
 
-import android.health.connect.datatypes.units.Temperature
+import com.google.gson.annotations.SerializedName
 import info.fekri8614.thermocall.model.data.*
-import info.fekri8614.thermocall.model.data.firebase.SendMessageDto
+import info.fekri8614.thermocall.model.data.firebase.FCMRequestBody
 import info.fekri8614.thermocall.model.data.sensor.Sensor
 import info.fekri8614.thermocall.model.data.sensor.SensorTemperature
 import info.fekri8614.thermocall.model.data.sensor.SensorUpdated
@@ -32,16 +32,6 @@ interface ApiService {
         @Path("id") sensorId: String
     ): ArrayList<SensorTemperature>
 
-    @POST("/send")
-    suspend fun sendMessage(
-        @Body body: SendMessageDto
-    )
-
-    @POST("/broadcast")
-    suspend fun broadcast(
-        @Body body: SendMessageDto
-    )
-
     @POST("my-sensors")
     suspend fun createSensor(
         @Header("user-id") userId: String = USER_ID,
@@ -59,6 +49,12 @@ interface ApiService {
         @Header("user-id") userId: String = USER_ID,
         @Path("id") sensorId: String,
         @Body sensorData: SensorUpdated
+    )
+
+    @POST("fcm-tokens")
+    suspend fun alarmSensor(
+        @Header("user-id") userId: String = USER_ID,
+        @Body fcmToken: FCMRequestBody
     )
 
 }
