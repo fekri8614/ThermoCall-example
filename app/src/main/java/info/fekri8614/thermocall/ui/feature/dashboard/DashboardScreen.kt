@@ -159,7 +159,6 @@ fun DashboardScreen() {
                 } else {
                     MainScreenBody(
                         modifier = Modifier.padding(it),
-                        centerCardBackground = Color.Yellow,
                         viewModel = viewModel,
                         context = context,
                         dataSensor = dataSensors,

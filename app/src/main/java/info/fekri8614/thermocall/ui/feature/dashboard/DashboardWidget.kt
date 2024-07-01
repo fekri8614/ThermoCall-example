@@ -51,7 +51,6 @@ class DashboardWidget {
     @Composable
     fun MainScreenBody(
         modifier: Modifier,
-        centerCardBackground: Color,
         viewModel: DashboardViewModel,
         context: Context,
         dataSensor: List<ThermoCall>,
@@ -66,7 +65,6 @@ class DashboardWidget {
             if (NetworkChecker(context).isInternetConnected) {
                 SensorItemList(
                     data = dataSensor,
-                    centerCardBackground = centerCardBackground
                 ) { id ->
                     if (NetworkChecker(context).isInternetConnected) {
                         onSensorClicked.invoke(id)
@@ -84,7 +82,6 @@ class DashboardWidget {
     @Composable
     fun SensorItemList(
         modifier: Modifier = Modifier,
-        centerCardBackground: Color,
         data: List<ThermoCall>,
         onSensorClicked: (String) -> Unit,
     ) {
@@ -102,7 +99,6 @@ class DashboardWidget {
                     SensorItem(
                         onSensorClicked = onSensorClicked,
                         data = data[index],
-                        centerCardBackground = centerCardBackground
                     )
                 }
             }
@@ -112,12 +108,13 @@ class DashboardWidget {
     @Composable
     fun SensorItem(
         modifier: Modifier = Modifier,
-        centerCardBackground: Color,
         onSensorClicked: (String) -> Unit,
         data: ThermoCall
     ) {
         val contentBgColor =
             if (data.currentTemperature!!.temperature!! >= data.min || data.currentTemperature.temperature!! < data.max) Color.Red else Color.White
+        val contentTextColor =
+            if (data.currentTemperature.temperature!! >= data.min || data.currentTemperature.temperature!! < data.max) Color.White else Color.Black
         Card(
             modifier = modifier
                 .fillMaxWidth(0.95f)
@@ -163,7 +160,11 @@ class DashboardWidget {
                     ) {
                         Text(
                             (data.currentTemperature.temperature ?: 0).toString(),
-                            style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Black),
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Black,
+                                color = contentTextColor
+                            ),
                             textAlign = TextAlign.Center
                         )
                     }
