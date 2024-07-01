@@ -157,10 +157,9 @@ fun DashboardScreen() {
                         )
                     }
                 } else {
-                    /// TODO: Set the condition background color
-
                     MainScreenBody(
                         modifier = Modifier.padding(it),
+                        centerCardBackground = Color.Yellow,
                         viewModel = viewModel,
                         context = context,
                         dataSensor = dataSensors,

@@ -53,8 +53,6 @@ import info.fekri8614.thermocall.util.MyScreens
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
-private const val LOG = "MainActivity"
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

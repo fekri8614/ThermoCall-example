@@ -1,16 +1,13 @@
 package info.fekri8614.thermocall.ui.feature.dashboard
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,7 +19,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
-import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
@@ -33,6 +29,7 @@ import androidx.compose.material.icons.filled.Create
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
@@ -43,13 +40,10 @@ import androidx.compose.ui.unit.sp
 import info.fekri8614.thermocall.R
 import info.fekri8614.thermocall.model.data.ThermoCall
 import info.fekri8614.thermocall.ui.theme.BackgroundColor
-import info.fekri8614.thermocall.ui.theme.PrimaryColor
-import info.fekri8614.thermocall.ui.theme.PrimaryVariant
 import info.fekri8614.thermocall.ui.theme.SensorItemBackground
 import info.fekri8614.thermocall.ui.theme.Shapes
 import info.fekri8614.thermocall.util.MyAnimShower
 import info.fekri8614.thermocall.util.MyDateFormatter
-import info.fekri8614.thermocall.util.MyScreens
 import info.fekri8614.thermocall.util.NetworkChecker
 
 class DashboardWidget {
@@ -57,6 +51,7 @@ class DashboardWidget {
     @Composable
     fun MainScreenBody(
         modifier: Modifier,
+        centerCardBackground: Color,
         viewModel: DashboardViewModel,
         context: Context,
         dataSensor: List<ThermoCall>,
@@ -68,13 +63,11 @@ class DashboardWidget {
                 .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (viewModel.showProgress.value)
-                LinearProgressIndicator(modifier = modifier.fillMaxWidth())
-
-            Spacer(modifier = Modifier.height(8.dp))
-
             if (NetworkChecker(context).isInternetConnected) {
-                SensorItemList(data = dataSensor) { id ->
+                SensorItemList(
+                    data = dataSensor,
+                    centerCardBackground = centerCardBackground
+                ) { id ->
                     if (NetworkChecker(context).isInternetConnected) {
                         onSensorClicked.invoke(id)
                     } else {
@@ -91,6 +84,7 @@ class DashboardWidget {
     @Composable
     fun SensorItemList(
         modifier: Modifier = Modifier,
+        centerCardBackground: Color,
         data: List<ThermoCall>,
         onSensorClicked: (String) -> Unit,
     ) {
@@ -105,7 +99,11 @@ class DashboardWidget {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 items(data.size) { index ->
-                    SensorItem(onSensorClicked = onSensorClicked, data = data[index])
+                    SensorItem(
+                        onSensorClicked = onSensorClicked,
+                        data = data[index],
+                        centerCardBackground = centerCardBackground
+                    )
                 }
             }
         }
@@ -114,9 +112,12 @@ class DashboardWidget {
     @Composable
     fun SensorItem(
         modifier: Modifier = Modifier,
+        centerCardBackground: Color,
         onSensorClicked: (String) -> Unit,
         data: ThermoCall
     ) {
+        val contentBgColor =
+            if (data.currentTemperature!!.temperature!! >= data.min || data.currentTemperature.temperature!! < data.max) Color.Red else Color.White
         Card(
             modifier = modifier
                 .fillMaxWidth(0.95f)
@@ -135,9 +136,16 @@ class DashboardWidget {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column (horizontalAlignment = Alignment.Start){
-                    Text(data.label, style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium))
-                    Text((MyDateFormatter().getMinuteValue(data.currentTemperature?.timestamp ?: "2024-05-27T12:02:27.664Z")).toString() + " minutes ago", fontSize = 12.sp)
+                Column(horizontalAlignment = Alignment.Start) {
+                    Text(
+                        data.label,
+                        style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                    )
+                    Text(
+                        (MyDateFormatter().getMinuteValue(
+                            data.currentTemperature.timestamp ?: "2024-05-27T12:02:27.664Z"
+                        )).toString() + " minutes ago", fontSize = 12.sp
+                    )
                 }
 
                 Row(
@@ -146,18 +154,20 @@ class DashboardWidget {
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     Text("${data.min}", style = TextStyle(fontSize = 18.sp))
-                    Card(
-                        backgroundColor = SensorItemBackground,
-                        shape = CircleShape,
-                        modifier =  Modifier.size(60.dp),
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .size(60.dp)
+                            .clip(CircleShape)
+                            .background(contentBgColor)
                     ) {
                         Text(
-                            (data.currentTemperature?.temperature ?: 0).toString(),
+                            (data.currentTemperature.temperature ?: 0).toString(),
                             style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Black),
-                            modifier = Modifier.padding(16.dp),
                             textAlign = TextAlign.Center
                         )
                     }
+
                     Text("${data.max}", style = TextStyle(fontSize = 18.sp))
                 }
             }
@@ -211,13 +221,25 @@ class DashboardWidget {
     }
 
     @Composable
-    fun DropDownMenuItem(title: String, icon: ImageVector, backgroundColor: Color = MaterialTheme.colors.background, showTick: Boolean = false, onClicked : () -> Unit) {
+    fun DropDownMenuItem(
+        title: String,
+        icon: ImageVector,
+        backgroundColor: Color = MaterialTheme.colors.background,
+        showTick: Boolean = false,
+        onClicked: () -> Unit
+    ) {
         DropdownMenuItem(
-            modifier = Modifier.size(width = 200.dp, height = 60.dp).background(backgroundColor),
+            modifier = Modifier
+                .size(width = 200.dp, height = 60.dp)
+                .background(backgroundColor),
             onClick = onClicked,
         ) {
-            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
-                if(showTick) Icon(Icons.Default.Check, contentDescription = "")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                if (showTick) Icon(Icons.Default.Check, contentDescription = "")
                 Text(title)
                 Icon(icon, contentDescription = title)
             }

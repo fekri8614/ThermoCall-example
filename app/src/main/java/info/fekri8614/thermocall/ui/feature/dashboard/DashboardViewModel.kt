@@ -35,35 +35,45 @@ class DashboardViewModel(
 
     val errorMessage = mutableStateOf("")
 
-    val fcmToken = mutableStateOf("")
+    private val fcmToken = mutableStateOf("")
 
     init {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if(task.isSuccessful) {
-                fcmToken.value = task.result
-            }
-        }
-
+//        getAlarm()
         getDataFromNet()
     }
 
-    fun getDataFromNet() {
-        synchronized("") {
-            viewModelScope.launch(coroutineExceptionHandler) {
-                while (isActive) {
-                    try {
-//                        showProgress.value = true
-                        val sensorData = sensorRepository.getAllThermoCalls()
-                        sensorRepository.alarmSensor(fcmToken = fcmToken.value)
-                        dataSensors.value = sensorData
-
-//                        showProgress.value = false
-                    } catch (e: Exception) {
-                        Log.e(TAG, "Error fetching data: ", e)
-                        errorMessage.value = "Failed to fetch data: ${e.localizedMessage}"
+    fun getAlarm() {
+        viewModelScope.launch(coroutineExceptionHandler) {
+            while(isActive) {
+                try {
+                    FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                        if(task.isSuccessful) {
+                            fcmToken.value = task.result
+                            Log.i(TAG, "qwer token => ${fcmToken.value}")
+                        }
                     }
-                    delay(2000) // Wait for 2 seconds before trying again
+                    sensorRepository.alarmSensor(fcmToken = fcmToken.value)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Occurred an ERROR: $e")
                 }
+                delay(6000) // Wait for 6 seconds before trying again
+            }
+        }
+    }
+
+    fun getDataFromNet() {
+        viewModelScope.launch(coroutineExceptionHandler) {
+            while (isActive) {
+                try {
+//                        showProgress.value = true
+                    val sensorData = sensorRepository.getAllThermoCalls()
+                    dataSensors.value = sensorData
+//                        showProgress.value = false
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error fetching data: ", e)
+                    errorMessage.value = "Failed to fetch data: ${e.localizedMessage}"
+                }
+                delay(2000) // Wait for 2 seconds before trying again
             }
         }
     }
