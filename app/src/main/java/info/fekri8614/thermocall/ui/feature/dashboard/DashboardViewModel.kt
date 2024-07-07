@@ -2,6 +2,7 @@ package info.fekri8614.thermocall.ui.feature.dashboard
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -38,16 +39,28 @@ class DashboardViewModel(
     private val fcmToken = mutableStateOf("")
 
     init {
-//        getAlarm()
+        getAlarm()
         getDataFromNet()
+    }
+
+    fun sensorItemTextColor(currentTemp: Int, minTemp: Int, maxTemp: Int): Color {
+        return if (currentTemp >= minTemp || currentTemp < maxTemp) {
+            Color.White
+        } else Color.Black
+    }
+
+    fun sensorItemBackgroundColor(currentTemp: Int, minTemp: Int, maxTemp: Int): Color {
+        return if (currentTemp >= minTemp || currentTemp < maxTemp) {
+            Color.Red
+        } else Color.White
     }
 
     fun getAlarm() {
         viewModelScope.launch(coroutineExceptionHandler) {
-            while(isActive) {
+            while (isActive) {
                 try {
                     FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-                        if(task.isSuccessful) {
+                        if (task.isSuccessful) {
                             fcmToken.value = task.result
                             Log.i(TAG, "qwer token => ${fcmToken.value}")
                         }

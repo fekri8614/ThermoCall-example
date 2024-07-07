@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenu
@@ -26,7 +28,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -62,7 +64,9 @@ fun SetupScreen(sensorId: String) {
     setupWidget.apply {
         Scaffold(
             topBar = {
-                val padding = if(config.orientation == Configuration.ORIENTATION_LANDSCAPE) 0.dp else ((config.screenWidthDp.dp) / 4)
+                val padding =
+                    if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) 0.dp else
+                        ((config.screenWidthDp.dp) / 4)
                 TopAppBar(
                     modifier = Modifier.fillMaxWidth(),
                     backgroundColor = Color.White,
@@ -73,7 +77,7 @@ fun SetupScreen(sensorId: String) {
                             viewModel.clearData()
                             navController.popBackStack()
                         }) {
-                            Icon(Icons.Default.ArrowBack, "Back")
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
                         }
                     },
                     actions = {
@@ -107,7 +111,8 @@ fun SetupScreen(sensorId: String) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues = paddingValues)
-                    .padding(top = 8.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
+                    .padding(top = 8.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
@@ -150,8 +155,12 @@ fun SetupScreen(sensorId: String) {
                                 shape = CircleShape,
                             ) {
                                 Text(
-                                    (viewModel.sensorIdData.value.currentTemperature?.temperature ?: 0).toString(),
-                                    style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Black),
+                                    (viewModel.sensorIdData.value.currentTemperature?.temperature
+                                        ?: 0).toString(),
+                                    style = TextStyle(
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Black
+                                    ),
                                     modifier = Modifier.padding(22.dp)
                                 )
                             }
@@ -176,9 +185,12 @@ fun SetupScreen(sensorId: String) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    OutlinedButton(onClick = {
-                        navController.popBackStack()
-                    }, modifier = Modifier.fillMaxWidth(0.45f), border = BorderStroke(2.dp, PrimaryColor)
+                    OutlinedButton(
+                        onClick = {
+                            navController.popBackStack()
+                        },
+                        modifier = Modifier.fillMaxWidth(0.45f),
+                        border = BorderStroke(2.dp, PrimaryColor)
                     ) {
                         Text("Cancel", modifier = Modifier.padding(4.dp))
                     }

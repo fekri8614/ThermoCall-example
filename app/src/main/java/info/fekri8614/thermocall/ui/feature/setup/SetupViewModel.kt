@@ -1,5 +1,6 @@
 package info.fekri8614.thermocall.ui.feature.setup
 
+import android.util.Log
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
@@ -12,12 +13,13 @@ import info.fekri8614.thermocall.model.repository.thermocall.SensorRepository
 import info.fekri8614.thermocall.util.coroutineExceptionHandler
 import kotlinx.coroutines.launch
 
+private val TAG = "SetupViewModel"
+
 class SetupViewModel(
     private val sensorRepository: SensorRepository
 ) : ViewModel() {
     val menuExpanded = mutableStateOf(false)
 
-    val sensorHistoryData = mutableStateOf<List<SensorTemperature>>(arrayListOf())
     val sensorIdData = mutableStateOf(Sensor("", "", "", "", currentTemperature = null))
     val sensorLabel = MutableLiveData("")
     val sensorMinTemp = MutableLiveData(0)
@@ -37,9 +39,10 @@ class SetupViewModel(
                 tempSliderPosition.value = ((sensorIdData.value.min.toFloat())..(sensorIdData.value.max.toFloat()))
                 sensorMinTemp.value = tempSliderPosition.value.start.toInt()
                 sensorMaxTemp.value = tempSliderPosition.value.endInclusive.toInt()
-                sensorHistoryData.value = sensorRepository.getSensorHistory(sensorId)
             }
         }
+
+        Log.i(TAG, "qwer data => $sensorId")
     }
 
     fun onDataUpdated(sensorId: String, newLabel: String?, newMin: Float?, newMax: Float?) {

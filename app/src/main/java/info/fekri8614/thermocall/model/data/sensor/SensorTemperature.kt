@@ -7,7 +7,7 @@ class SensorTemperatureList : ArrayList<SensorTemperature>()
 
 data class SensorTemperature(
     @SerializedName("temperature")
-    val temperature: Int?,
+    val temperature: Int,
     @SerializedName("timestamp")
-    val timestamp: String?
+    val timestamp: String
 )

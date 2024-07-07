@@ -65,13 +65,15 @@ class DashboardWidget {
             if (NetworkChecker(context).isInternetConnected) {
                 SensorItemList(
                     data = dataSensor,
-                ) { id ->
-                    if (NetworkChecker(context).isInternetConnected) {
-                        onSensorClicked.invoke(id)
-                    } else {
-                        viewModel.showNetDialog.value = true
-                    }
-                }
+                    onSensorClicked = { id ->
+                        if (NetworkChecker(context).isInternetConnected) {
+                            onSensorClicked.invoke(id)
+                        } else {
+                            viewModel.showNetDialog.value = true
+                        }
+                    },
+                    viewModel = viewModel
+                )
             } else {
                 MyAnimShower(name = R.raw.loading_anim)
                 viewModel.showNetDialog.value = true
@@ -84,6 +86,7 @@ class DashboardWidget {
         modifier: Modifier = Modifier,
         data: List<ThermoCall>,
         onSensorClicked: (String) -> Unit,
+        viewModel: DashboardViewModel
     ) {
         Surface(
             modifier = modifier
@@ -99,6 +102,7 @@ class DashboardWidget {
                     SensorItem(
                         onSensorClicked = onSensorClicked,
                         data = data[index],
+                        viewModel = viewModel,
                     )
                 }
             }
@@ -109,12 +113,9 @@ class DashboardWidget {
     fun SensorItem(
         modifier: Modifier = Modifier,
         onSensorClicked: (String) -> Unit,
-        data: ThermoCall
+        data: ThermoCall,
+        viewModel: DashboardViewModel,
     ) {
-        val contentBgColor =
-            if (data.currentTemperature!!.temperature!! >= data.min || data.currentTemperature.temperature!! < data.max) Color.Red else Color.White
-        val contentTextColor =
-            if (data.currentTemperature.temperature!! >= data.min || data.currentTemperature.temperature!! < data.max) Color.White else Color.Black
         Card(
             modifier = modifier
                 .fillMaxWidth(0.95f)
@@ -138,11 +139,12 @@ class DashboardWidget {
                         data.label,
                         style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium)
                     )
-                    Text(
-                        (MyDateFormatter().getMinuteValue(
-                            data.currentTemperature.timestamp ?: "2024-05-27T12:02:27.664Z"
-                        )).toString() + " minutes ago", fontSize = 12.sp
-                    )
+                    if (data.currentTemperature != null)
+                        Text(
+                            (MyDateFormatter().getMinuteValue(
+                                data.currentTemperature.timestamp
+                            )).toString() + " minutes ago", fontSize = 12.sp
+                        )
                 }
 
                 Row(
@@ -151,24 +153,50 @@ class DashboardWidget {
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     Text("${data.min}", style = TextStyle(fontSize = 18.sp))
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .size(60.dp)
-                            .clip(CircleShape)
-                            .background(contentBgColor)
-                    ) {
-                        Text(
-                            (data.currentTemperature.temperature ?: 0).toString(),
-                            style = TextStyle(
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Black,
-                                color = contentTextColor
-                            ),
-                            textAlign = TextAlign.Center
-                        )
+                    if (data.currentTemperature != null) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .size(60.dp)
+                                .clip(CircleShape)
+                                .background(
+                                    viewModel.sensorItemBackgroundColor(
+                                        currentTemp = data.currentTemperature.temperature,
+                                        minTemp = data.min,
+                                        maxTemp = data.max
+                                    )
+                                )
+                        ) {
+                            Text(
+                                data.currentTemperature.temperature.toString(),
+                                style = TextStyle(
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Black,
+                                    color = viewModel.sensorItemTextColor(
+                                        currentTemp = data.currentTemperature.temperature,
+                                        minTemp = data.min,
+                                        maxTemp = data.max
+                                    )
+                                ),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    } else {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .size(60.dp)
+                                .clip(CircleShape).background(Color.White)
+                        ) {
+                            Text(
+                                "no-temp set",
+                                style = TextStyle(
+                                    fontSize = 9.sp,
+                                    fontWeight = FontWeight.Black,
+                                ),
+                            )
+                        }
                     }
-
                     Text("${data.max}", style = TextStyle(fontSize = 18.sp))
                 }
             }
