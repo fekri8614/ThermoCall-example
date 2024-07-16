@@ -45,6 +45,7 @@ import info.fekri8614.thermocall.ui.theme.Shapes
 import info.fekri8614.thermocall.util.MyAnimShower
 import info.fekri8614.thermocall.util.MyDateFormatter
 import info.fekri8614.thermocall.util.NetworkChecker
+import kotlin.math.roundToInt
 
 class DashboardWidget {
 
@@ -168,7 +169,7 @@ class DashboardWidget {
                                 )
                         ) {
                             Text(
-                                data.currentTemperature.temperature.toString(),
+                                data.currentTemperature.temperature.roundToInt().toString(),
                                 style = TextStyle(
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Black,

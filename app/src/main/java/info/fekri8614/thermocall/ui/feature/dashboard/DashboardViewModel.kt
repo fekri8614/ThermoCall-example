@@ -21,7 +21,6 @@ private const val TAG = "DashboardViewModel"
 class DashboardViewModel(
     private val sensorRepository: SensorRepository
 ) : ViewModel() {
-    val showProgress = mutableStateOf(false)
     val dataSensors = mutableStateOf<List<ThermoCall>>(listOf())
     val showDropDownMenu = mutableStateOf(false)
 
@@ -43,16 +42,16 @@ class DashboardViewModel(
         getDataFromNet()
     }
 
-    fun sensorItemTextColor(currentTemp: Int, minTemp: Int, maxTemp: Int): Color {
-        return if (currentTemp >= minTemp || currentTemp < maxTemp) {
-            Color.White
-        } else Color.Black
+    fun sensorItemTextColor(currentTemp: Double, minTemp: Int, maxTemp: Int): Color {
+        return if (currentTemp >= minTemp && currentTemp <= maxTemp) {
+            Color.Black
+        } else Color.White
     }
 
-    fun sensorItemBackgroundColor(currentTemp: Int, minTemp: Int, maxTemp: Int): Color {
-        return if (currentTemp >= minTemp || currentTemp < maxTemp) {
-            Color.Red
-        } else Color.White
+    fun sensorItemBackgroundColor(currentTemp: Double, minTemp: Int, maxTemp: Int): Color {
+        return if (currentTemp >= minTemp && currentTemp <= maxTemp) {
+            Color.White
+        } else Color.Red
     }
 
     fun getAlarm() {
@@ -69,7 +68,7 @@ class DashboardViewModel(
                 } catch (e: Exception) {
                     Log.e(TAG, "Occurred an ERROR: $e")
                 }
-                delay(6000) // Wait for 6 seconds before trying again
+                delay(150000)
             }
         }
     }
@@ -86,7 +85,7 @@ class DashboardViewModel(
                     Log.e(TAG, "Error fetching data: ", e)
                     errorMessage.value = "Failed to fetch data: ${e.localizedMessage}"
                 }
-                delay(2000) // Wait for 2 seconds before trying again
+                delay(150000)
             }
         }
     }

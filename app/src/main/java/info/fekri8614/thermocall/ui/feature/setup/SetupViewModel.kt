@@ -46,15 +46,18 @@ class SetupViewModel(
     }
 
     fun onDataUpdated(sensorId: String, newLabel: String?, newMin: Float?, newMax: Float?) {
-        viewModelScope.launch(coroutineExceptionHandler) {
-            sensorRepository.updateSensor(
-                sensorId = sensorId,
-                data = SensorUpdated(
-                    label = newLabel ?: sensorIdData.value.label,
-                    min = newMin?.toInt() ?: sensorIdData.value.min.toInt(),
-                    max = newMax?.toInt() ?: sensorIdData.value.max.toInt(),
+        synchronized("") {
+            viewModelScope.launch(coroutineExceptionHandler) {
+                sensorRepository.updateSensor(
+                    sensorId = sensorId,
+                    data = SensorUpdated(
+                        label = newLabel ?: sensorIdData.value.label,
+                        min = newMin?.toInt() ?: sensorIdData.value.min.toInt(),
+                        max = newMax?.toInt() ?: sensorIdData.value.max.toInt(),
+                    )
                 )
-            )
+                getSensorData(sensorId = sensorId)
+            }
         }
     }
 

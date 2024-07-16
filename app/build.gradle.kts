@@ -107,7 +107,7 @@ dependencies {
 
     // Firebase Authentication
     implementation("com.google.firebase:firebase-auth-ktx")
-    
+
     // WorkManager
     implementation("androidx.work:work-runtime-ktx:$work_version")
 
