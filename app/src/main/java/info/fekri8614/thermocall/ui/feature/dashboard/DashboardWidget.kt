@@ -142,9 +142,8 @@ class DashboardWidget {
                     )
                     if (data.currentTemperature != null)
                         Text(
-                            (MyDateFormatter().getMinuteValue(
-                                data.currentTemperature.timestamp
-                            )).toString() + " minutes ago", fontSize = 12.sp
+                            "Last update at " + (MyDateFormatter().getMinuteValue(data.currentTemperature.timestamp)),
+                            fontSize = 12.sp
                         )
                 }
 

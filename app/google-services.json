@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "815728511205",
-    "project_id": "rktermotech",
-    "storage_bucket": "rktermotech.appspot.com"
+    "project_number": "829489271718",
+    "project_id": "thermocall",
+    "storage_bucket": "thermocall.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:815728511205:android:8a6b41ffdecb1af01b6c0c",
+        "mobilesdk_app_id": "1:829489271718:android:354a41039e44e59a85f567",
         "android_client_info": {
           "package_name": "info.fekri8614.thermocall"
         }
@@ -15,26 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCaL399jdmZogQKf7NNx7EwpBjPpKolC9I"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:815728511205:android:2e5178b3b9a53ed31b6c0c",
-        "android_client_info": {
-          "package_name": "org.rubikamp.thermo_call"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCaL399jdmZogQKf7NNx7EwpBjPpKolC9I"
+          "current_key": "AIzaSyBr2iNUMWoRtf8CstYsjmMOr5v_3_TSCN0"
         }
       ],
       "services": {

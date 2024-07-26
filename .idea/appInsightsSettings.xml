@@ -10,9 +10,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="info.fekri8614.thermocall" />
-                  <option name="mobileSdkAppId" value="1:815728511205:android:8a6b41ffdecb1af01b6c0c" />
-                  <option name="projectId" value="rktermotech" />
-                  <option name="projectNumber" value="815728511205" />
+                  <option name="mobileSdkAppId" value="1:829489271718:android:354a41039e44e59a85f567" />
+                  <option name="projectId" value="thermocall" />
+                  <option name="projectNumber" value="829489271718" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
